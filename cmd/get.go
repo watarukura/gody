@@ -15,23 +15,21 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"github.com/watarukura/gody/gody"
 )
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "get one record",
-	Long: `get one recorde by hash key (& range key)`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get called")
-	},
+	Long:  `get one recorde by hash key (& range key)`,
+	Run:   gody.Get,
 }
 
 func init() {
 	RootCmd.AddCommand(getCmd)
+	getCmd.Flags().StringVar(&getFlag.tableName, "table", "", "DynamoDB table name")
 
 	// Here you will define your flags and configuration settings.
 
