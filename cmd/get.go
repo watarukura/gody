@@ -27,9 +27,13 @@ var getCmd = &cobra.Command{
 	Run:   gody.Get,
 }
 
+var getFlag gody.GetFlag
+
 func init() {
 	RootCmd.AddCommand(getCmd)
-	getCmd.Flags().StringVar(&getFlag.tableName, "table", "", "DynamoDB table name")
+	getCmd.Flags().StringVar(&getFlag.TableName, "table", "", "DynamoDB table name")
+	getCmd.Flags().StringVar(&getFlag.HashKey, "hashkey", "", "Hash Key")
+	getCmd.Flags().StringVar(&getFlag.RangeKey, "rangekey", "", "Hash Key")
 
 	// Here you will define your flags and configuration settings.
 

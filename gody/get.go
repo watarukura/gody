@@ -1,17 +1,17 @@
 package gody
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/evalphobia/aws-sdk-go-wrapper/config"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"log"
 	"fmt"
+	"github.com/spf13/cobra"
 )
 
-type getFlag struct {
-	tableName string
-	hashKey   string
-	rangeKey  string
+type GetFlag struct {
+	TableName string
+	HashKey   string
+	RangeKey  string
 }
 
 func Get(*cobra.Command, []string) {
@@ -22,28 +22,30 @@ func Get(*cobra.Command, []string) {
 		//Endpoint:  "http://localhost:8000", // option for DynamoDB Local
 		//Filename: "~/.aws/credentials",
 		//Profile:  "CRM-STG",
-		//Region:  region,
-		//Profile: profile,
+		Region:  "ap-northeast-1",
+		Profile: "default",
 	})
 	if err != nil {
 		log.Fatal("error to create client")
 	}
 
-	table, err := svc.GetTable(tableName)
+	//var getFlag GetFlag
+	table, err := svc.GetTable("hn_item_store_data")
 	if err != nil {
-		log.Fatal("error to list tables")
+		log.Fatal("error to get table")
 	}
-	fmt.Println(table)
+	//fmt.Println(table)
 
 	var result map[string]interface{}
-	if rangeKey == "" {
-		result, err = target.GetOne(hashKey)
-	} else {
-		result, err = target.GetOne(hashKey, rangeKey)
-	}
-	if err != nil {
-		panic("error to get item")
-	}
+	//if getFlag.RangeKey == "" {
+	//	result, err = table.GetOne(getFlag.HashKey)
+	//} else {
+	//	result, err = table.GetOne(getFlag.HashKey, getFlag.RangeKey)
+	//}
+	//if err != nil {
+	//	panic("error to get item")
+	//}
+	result, err = table.GetOne("4901601353891")
 	fmt.Println(result)
 
 }

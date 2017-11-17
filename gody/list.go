@@ -16,8 +16,8 @@ func List(*cobra.Command, []string) {
 		//Endpoint:  "http://localhost:8000", // option for DynamoDB Local
 		//Filename: "~/.aws/credentials",
 		//Profile:  "CRM-STG",
-		//Region:  region,
-		//Profile: profile,
+		Region:  "ap-northeast-1",
+		Profile: "default",
 	})
 	if err != nil {
 		log.Fatal("error to create client")
