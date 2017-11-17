@@ -27,9 +27,12 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/watarukura/gody/gody"
 )
 
 var cfgFile string
+var Profile string
+var Region string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -57,8 +60,11 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
-	RootCmd.PersistentFlags().StringP("profile", "", "", "AWS profile(default none)")
-	RootCmd.PersistentFlags().StringP("region", "", "", "AWS profile(default none)")
+
+	RootCmd.PersistentFlags().StringVarP(&Profile,"profile", "P", "default", "AWS profile(default default)")
+	RootCmd.PersistentFlags().StringVarP(&Region, "region", "R", "ap-northeast-1", "AWS profile(default ap-northeast-1)")
+	viper.BindPFlag("profile", RootCmd.PersistentFlags().Lookup("profile"))
+	viper.BindPFlag("region", RootCmd.PersistentFlags().Lookup("region"))
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -89,4 +95,14 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func newClient() (*gody.Client, error) {
+	return gody.NewClient(
+		os.Stdin,
+		os.Stdout,
+		os.Stderr,
+		viper.GetString("profile"),
+		viper.GetString("region"),
+	)
 }
