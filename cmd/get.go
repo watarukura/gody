@@ -19,21 +19,23 @@ import (
 	"github.com/watarukura/gody/gody"
 )
 
+var getOption gody.GetOption
+
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "get one record",
 	Long:  `get one recorde by hash key (& range key)`,
-	Run:   gody.Get,
+	Run: func(*cobra.Command, []string) {
+		gody.Get(&getOption)
+	},
 }
-
-var getFlag gody.GetFlag
 
 func init() {
 	RootCmd.AddCommand(getCmd)
-	getCmd.Flags().StringVar(&getFlag.TableName, "table", "", "DynamoDB table name")
-	getCmd.Flags().StringVar(&getFlag.HashKey, "hashkey", "", "Hash Key")
-	getCmd.Flags().StringVar(&getFlag.RangeKey, "rangekey", "", "Hash Key")
+	getCmd.Flags().StringVarP(&getOption.TableName, "table", "T","", "DynamoDB table name")
+	getCmd.Flags().StringVarP(&getOption.HashKey, "hashkey", "H","", "Hash Key")
+	getCmd.Flags().StringVarP(&getOption.RangeKey, "rangekey", "R","", "Range Key")
 
 	// Here you will define your flags and configuration settings.
 

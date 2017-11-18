@@ -5,16 +5,15 @@ import (
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"log"
 	"fmt"
-	"github.com/spf13/cobra"
 )
 
-type GetFlag struct {
+type GetOption struct {
 	TableName string
 	HashKey   string
 	RangeKey  string
 }
 
-func Get(*cobra.Command, []string) {
+func Get(getOption *GetOption) {
 	svc, err := dynamodb.New(config.Config{
 		//AccessKey: "access",
 		//SecretKey: "secret",
@@ -29,8 +28,10 @@ func Get(*cobra.Command, []string) {
 		log.Fatal("error to create client")
 	}
 
+	fmt.Println(getOption)
+
 	//var getFlag GetFlag
-	table, err := svc.GetTable("hn_item_store_data")
+	table, err := svc.GetTable(getOption.TableName)
 	if err != nil {
 		log.Fatal("error to get table")
 	}
@@ -45,7 +46,7 @@ func Get(*cobra.Command, []string) {
 	//if err != nil {
 	//	panic("error to get item")
 	//}
-	result, err = table.GetOne("4901601353891")
+	result, err = table.GetOne(getFlag.HashKey)
 	fmt.Println(result)
 
 }

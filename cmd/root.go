@@ -32,8 +32,6 @@ import (
 )
 
 var cfgFile string
-var Profile string
-var Region string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -62,8 +60,8 @@ func init() {
 	// will be global for your application.
 	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
 
-	RootCmd.PersistentFlags().StringVarP(&Profile,"profile", "P", "default", "AWS profile(default default)")
-	RootCmd.PersistentFlags().StringVarP(&Region, "region", "R", "ap-northeast-1", "AWS profile(default ap-northeast-1)")
+	RootCmd.PersistentFlags().StringP("profile", "P", "default", "AWS profile(default default)")
+	RootCmd.PersistentFlags().StringP("region", "R", "ap-northeast-1", "AWS profile(default ap-northeast-1)")
 	viper.BindPFlag("profile", RootCmd.PersistentFlags().Lookup("profile"))
 	viper.BindPFlag("region", RootCmd.PersistentFlags().Lookup("region"))
 
