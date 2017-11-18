@@ -28,6 +28,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/watarukura/gody/gody"
+	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 )
 
 var cfgFile string
@@ -59,7 +60,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
+	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
 
 	RootCmd.PersistentFlags().StringVarP(&Profile,"profile", "P", "default", "AWS profile(default default)")
 	RootCmd.PersistentFlags().StringVarP(&Region, "region", "R", "ap-northeast-1", "AWS profile(default ap-northeast-1)")
@@ -68,7 +69,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -97,11 +98,8 @@ func initConfig() {
 	}
 }
 
-func newClient() (*gody.Client, error) {
-	return gody.NewClient(
-		os.Stdin,
-		os.Stdout,
-		os.Stderr,
+func newService() (*dynamodb.DynamoDB, error) {
+	return gody.NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
 	)
