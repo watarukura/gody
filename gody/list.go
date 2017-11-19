@@ -11,5 +11,7 @@ func List(svc *dynamodb.DynamoDB) {
 	if err != nil {
 		log.Fatal("error to list tables")
 	}
-	fmt.Println(tables)
+	for _, table := range tables {
+		fmt.Println(table)
+	}
 }

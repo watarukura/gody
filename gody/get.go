@@ -28,6 +28,8 @@ func Get(svc *dynamodb.DynamoDB, getOption *GetOption) {
 		log.Fatal("error to get item")
 		panic("error to get item")
 	}
-	fmt.Println(result)
-
+	for k,v := range result {
+		fmt.Print(k + ": ")
+		fmt.Println(v)
+	}
 }
