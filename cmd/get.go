@@ -17,25 +17,13 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/watarukura/gody/gody"
+	"log"
 )
 
 var getOption gody.GetOption
 
-// getCmd represents the get command
-var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "get one record",
-	Long:  `get one recorde by hash key (& range key)`,
-	Run: func(*cobra.Command, []string) {
-		gody.Get(&getOption)
-	},
-}
-
 func init() {
-	RootCmd.AddCommand(getCmd)
-	getCmd.Flags().StringVarP(&getOption.TableName, "table", "T","", "DynamoDB table name")
-	getCmd.Flags().StringVarP(&getOption.HashKey, "hashkey", "H","", "Hash Key")
-	getCmd.Flags().StringVarP(&getOption.RangeKey, "rangekey", "R","", "Range Key")
+	RootCmd.AddCommand(getCmd())
 
 	// Here you will define your flags and configuration settings.
 
@@ -46,4 +34,27 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func getCmd() *cobra.Command {
+	svc, err := newService()
+	if err != nil {
+		log.Fatal("create service failed.")
+	}
+
+	cmd := &cobra.Command{
+		Use:   "get",
+		Short: "Get one record",
+		Run: func(*cobra.Command, []string) {
+			gody.Get(svc, &getOption)
+		},
+	}
+
+	options := cmd.Flags()
+	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
+	options.StringVar(&getOption.HashKey, "hash", "", "Hash Key")
+	options.StringVar(&getOption.RangeKey, "range", "", "Range Key")
+
+	return cmd
+
 }

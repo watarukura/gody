@@ -60,8 +60,8 @@ func init() {
 	// will be global for your application.
 	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
 
-	RootCmd.PersistentFlags().StringP("profile", "P", "default", "AWS profile(default default)")
-	RootCmd.PersistentFlags().StringP("region", "R", "ap-northeast-1", "AWS profile(default ap-northeast-1)")
+	RootCmd.PersistentFlags().StringP("profile", "P", "default", "AWS profile")
+	RootCmd.PersistentFlags().StringP("region", "R", "ap-northeast-1", "AWS region")
 	viper.BindPFlag("profile", RootCmd.PersistentFlags().Lookup("profile"))
 	viper.BindPFlag("region", RootCmd.PersistentFlags().Lookup("region"))
 
