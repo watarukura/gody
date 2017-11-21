@@ -1,12 +1,17 @@
 package gody
 
 import (
-	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"log"
 	"fmt"
+	"github.com/spf13/viper"
 )
 
-func List(svc *dynamodb.DynamoDB) {
+func List() {
+	fmt.Println("eee" + viper.GetString("profile"))
+	svc, err := NewService(
+		viper.GetString("profile"),
+		viper.GetString("region"),
+	)
 	tables, err := svc.ListTables()
 	if err != nil {
 		log.Fatal("error to list tables")

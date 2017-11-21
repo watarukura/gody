@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/watarukura/gody/gody"
@@ -37,7 +37,7 @@ var cfgFile string
 var RootCmd = &cobra.Command{
 	Use:   "gody",
 	Short: "call aws-sdk-go DynamoDB from cli",
-	Long: `call aws-sdk-go DynamoDB from cli`,
+	Long:  `call aws-sdk-go DynamoDB from cli`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -52,7 +52,12 @@ func Execute() {
 	}
 }
 
-func init() { 
+var (
+	profile string
+	region  string
+)
+
+func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -60,8 +65,9 @@ func init() {
 	// will be global for your application.
 	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gody.yaml)")
 
-	RootCmd.PersistentFlags().StringP("profile", "P", "default", "AWS profile")
-	RootCmd.PersistentFlags().StringP("region", "R", "ap-northeast-1", "AWS region")
+	RootCmd.PersistentFlags().StringVar(&profile, "profile", "default", "AWS profile")
+	RootCmd.PersistentFlags().StringVar(&region, "region", "ap-northeast-1", "AWS region")
+
 	viper.BindPFlag("profile", RootCmd.PersistentFlags().Lookup("profile"))
 	viper.BindPFlag("region", RootCmd.PersistentFlags().Lookup("region"))
 
@@ -94,11 +100,4 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
-}
-
-func newService() (*dynamodb.DynamoDB, error) {
-	return gody.NewService(
-		viper.GetString("profile"),
-		viper.GetString("region"),
-	)
 }

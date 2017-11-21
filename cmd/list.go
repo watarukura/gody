@@ -17,7 +17,6 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/watarukura/gody/gody"
-	"log"
 )
 
 func init() {
@@ -25,16 +24,11 @@ func init() {
 }
 
 func listCmd() *cobra.Command {
-	svc, err := newService()
-	if err != nil {
-		log.Fatal("create service failed.")
-	}
-
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List DynamoDB tables",
-		Run: func(*cobra.Command, []string) {
-			gody.List(svc)
+		Run:   func(cmd *cobra.Command, args []string) {
+			gody.List()
 		},
 	}
 	return cmd
