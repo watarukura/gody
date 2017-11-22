@@ -27,13 +27,13 @@ func ssv(ddbresult map[string]interface{}, header bool) {
 	if header {
 		for k, v := range ddbresult {
 			head = append(head, k)
-			body = append(body, fmt.Sprintf("%s", v))
+			body = append(body, fmt.Sprint(v))
 		}
 		fmt.Println(strings.Join(head, " "))
 		fmt.Println(strings.Join(body, " "))
 	} else {
 		for _, v := range ddbresult {
-			body = append(body, fmt.Sprintf("%s", v))
+			body = append(body, fmt.Sprint(v))
 		}
 		fmt.Println(strings.Join(body, " "))
 	}
