@@ -17,10 +17,9 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/watarukura/gody/gody"
-	"log"
 )
 
-var getOption gody.GetOption
+var getOption gody.GetItemOption
 
 func init() {
 	RootCmd.AddCommand(getCmd())
@@ -37,23 +36,20 @@ func init() {
 }
 
 func getCmd() *cobra.Command {
-	svc, err := newService()
-	if err != nil {
-		log.Fatal("create service failed.")
-	}
-
 	cmd := &cobra.Command{
 		Use:   "get",
 		Short: "Get one record",
 		Run: func(*cobra.Command, []string) {
-			gody.Get(svc, &getOption)
+			gody.Get(&getOption)
 		},
 	}
 
 	options := cmd.Flags()
 	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
-	options.StringVar(&getOption.HashKey, "hash", "", "Hash Key")
-	options.StringVar(&getOption.RangeKey, "range", "", "Range Key")
+	options.StringVar(&getOption.PartitionKey, "pkey", "", "Partition Key")
+	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
+	options.StringVar(&getOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
+	options.BoolVar(&getOption.Header, "header", false, "With Header")
 
 	return cmd
 

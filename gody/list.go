@@ -7,7 +7,6 @@ import (
 )
 
 func List() {
-	fmt.Println("eee" + viper.GetString("profile"))
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),

@@ -1,35 +1,37 @@
 package gody
 
 import (
-	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"log"
-	"fmt"
+	"github.com/spf13/viper"
 )
 
-type GetOption struct {
-	TableName string
-	HashKey   string
-	RangeKey  string
+type GetItemOption struct {
+	TableName    string
+	PartitionKey string
+	SortKey      string
+	Format       string
+	Header       bool
 }
 
-func Get(svc *dynamodb.DynamoDB, getOption *GetOption) {
-	table, err := svc.GetTable(getOption.TableName)
+func Get(option *GetItemOption) {
+	svc, err := NewService(
+		viper.GetString("profile"),
+		viper.GetString("region"),
+	)
+	table, err := svc.GetTable(option.TableName)
 	if err != nil {
 		log.Fatal("error to get table")
 	}
 
 	var result map[string]interface{}
-	if getOption.RangeKey == "" {
-		result, err = table.GetOne(getOption.HashKey)
+	if option.SortKey == "" {
+		result, err = table.GetOne(option.PartitionKey)
 	} else {
-		result, err = table.GetOne(getOption.HashKey, getOption.RangeKey)
+		result, err = table.GetOne(option.PartitionKey, option.SortKey)
 	}
 	if err != nil {
 		log.Fatal("error to get item")
-		panic("error to get item")
 	}
-	for k,v := range result {
-		fmt.Print(k + ": ")
-		fmt.Println(v)
-	}
+
+	Format(result, option.Format, option.Header)
 }
