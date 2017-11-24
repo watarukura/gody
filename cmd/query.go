@@ -52,7 +52,7 @@ func queryCmd() *cobra.Command {
 	options.BoolVar(&queryOption.Header, "header", false, "With Header")
 	options.Int64Var(&queryOption.Limit, "limit", 100, "Output limit")
 	options.StringVar(&queryOption.Index, "index", "", "GSI Name")
-	options.BoolVar(&queryOption.Eq, "eq", true, "GSI Query Parameter EQ")
+	options.BoolVar(&queryOption.Eq, "eq", false, "GSI Query Parameter EQ")
 	options.BoolVar(&queryOption.Lt, "lt", false, "GSI Query Parameter LT")
 	options.BoolVar(&queryOption.Le, "le", false, "GSI Query Parameter LE")
 	options.BoolVar(&queryOption.Gt, "gt", false, "GSI Query Parameter GT")

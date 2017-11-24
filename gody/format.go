@@ -28,11 +28,11 @@ func Format(ddbresult []map[string]interface{}, format string, header bool) {
 
 func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
 	if header {
-		for i,b := range ddbresult {
-			for k,v := range b {
-				if i == 0 {
-					head = append(head, k)
-				}
+		for k,_ := range ddbresult[0] {
+			head = append(head, k)
+		}
+		for _,b := range ddbresult {
+			for _,v := range b {
 				body_unit = append(body_unit, fmt.Sprint(v))
 			}
 			body = append(body, body_unit)

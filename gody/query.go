@@ -4,7 +4,6 @@ import (
 	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
-	"fmt"
 )
 
 type QueryOption struct {
@@ -56,18 +55,24 @@ func buildCondition(table *dynamodb.Table, option *QueryOption) *dynamodb.Condit
 
 	if design.HasRangeKey() {
 		skey := design.GetRangeKeyName();
-
 		switch {
 		case option.Eq == true:
-			cond.AndEQ(skey, option.SortKey)
+			cond.AndEQ(skey, option.SortKey);
+			break;
 		case option.Lt == true:
-			cond.AndLT(skey, option.SortKey)
+			cond.AndLT(skey, option.SortKey);
+			break;
 		case option.Le == true:
-			cond.AndLE(skey, option.SortKey)
+			cond.AndLE(skey, option.SortKey);
+			break;
 		case option.Gt == true:
-			cond.AndGT(skey, option.SortKey)
+			cond.AndGT(skey, option.SortKey);
+			break;
 		case option.Ge == true:
-			cond.AndGE(skey, option.SortKey)
+			cond.AndGE(skey, option.SortKey);
+			break;
+		default:
+			break;
 		}
 	}
 
