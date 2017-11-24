@@ -33,5 +33,8 @@ func Get(option *GetItemOption) {
 		log.Fatal("error to get item")
 	}
 
-	Format(result, option.Format, option.Header)
+	var result_slice []map[string]interface{}
+	result_slice = append(result_slice, result)
+
+	Format(result_slice, option.Format, option.Header)
 }
