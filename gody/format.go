@@ -27,31 +27,22 @@ func Format(ddbresult []map[string]interface{}, format string, header bool) {
 }
 
 func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
+	var body_unit []string
+	for k, _ := range ddbresult[0] {
+		head = append(head, k)
+	}
+	for i, h := range head {
+		for _, v := range ddbresult {
+			body_unit[i] = fmt.Sprint(v[h])
+		}
+		body = append(body, body_unit)
+		body_unit = make([]string, 0)
+	}
 	if header {
-		for k,_ := range ddbresult[0] {
-			head = append(head, k)
-		}
-		for _,b := range ddbresult {
-			for _,v := range b {
-				body_unit = append(body_unit, fmt.Sprint(v))
-			}
-			body = append(body, body_unit)
-			body_unit = make([]string, 0)
-		}
 		fmt.Println(strings.Join(head, delimiter))
-		for _, b2 :=  range body {
-			fmt.Println(strings.Join(b2, delimiter))
-		}
-	} else {
-		for _,b := range ddbresult {
-			for _,v := range b {
-				body_unit = append(body_unit, fmt.Sprint(v))
-			}
-			body = append(body, body_unit)
-		}
-		for _, b2 :=  range body {
-			fmt.Println(strings.Join(b2, delimiter))
-		}
+	}
+	for _, b2 := range body {
+		fmt.Println(strings.Join(b2, delimiter))
 	}
 }
 
