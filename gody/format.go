@@ -27,13 +27,23 @@ func Format(ddbresult []map[string]interface{}, format string, header bool) {
 }
 
 func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
-	var body_unit []string
-	for k, _ := range ddbresult[0] {
-		head = append(head, k)
+	var head_dup []string
+	for _, h := range ddbresult {
+		for k, _ := range h {
+			head_dup = append(head_dup, k)
+		}
 	}
-	for i, h := range head {
-		for _, v := range ddbresult {
-			body_unit[i] = fmt.Sprint(v[h])
+	head := removeDuplicate(head_dup)
+
+	var body_unit []string
+	for _, v := range ddbresult {
+		for _, h := range head {
+			_,ok := v[h]
+			if ok {
+				body_unit = append(body_unit, fmt.Sprint(v[h]))
+			} else {
+				body_unit = append(body_unit, "_")
+			}
 		}
 		body = append(body, body_unit)
 		body_unit = make([]string, 0)
@@ -49,4 +59,17 @@ func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
 func toJson(ddbresult []map[string]interface{}) {
 	jsonString, _ := json.Marshal(ddbresult)
 	fmt.Println(string(jsonString))
+}
+
+// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
+func removeDuplicate(args []string) []string {
+	results := make([]string, 0, len(args))
+	encountered := map[string]bool{}
+	for i := 0; i < len(args); i++ {
+		if !encountered[args[i]] {
+			encountered[args[i]] = true
+			results = append(results, args[i])
+		}
+	}
+	return results
 }
