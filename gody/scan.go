@@ -25,7 +25,6 @@ func Scan(option *ScanOption) {
 
 	cond := table.NewConditionList();
 	cond.SetLimit(option.Limit);
-
 	var query_result *dynamodb.QueryResult
 	query_result, err = table.ScanWithCondition(cond)
 	if err != nil {

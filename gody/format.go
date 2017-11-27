@@ -2,43 +2,60 @@ package gody
 
 import (
 	"fmt"
-	"strings"
 	"encoding/json"
+	"encoding/csv"
+	"os"
+	"unicode/utf8"
+	"sort"
 )
 
 var (
-	head      []string
-	body      [][]string
-	body_unit []string
-	delimiter string
+	body [][]string
 )
 
 func Format(ddbresult []map[string]interface{}, format string, header bool) {
 	switch format {
 	case "ssv":
-		xsv(ddbresult, header, " ")
+		toXsv(ddbresult, header, " ")
 	case "csv":
-		xsv(ddbresult, header, ",")
+		toXsv(ddbresult, header, ",")
 	case "tsv":
-		xsv(ddbresult, header, "\t")
+		toXsv(ddbresult, header, "\t")
 	case "json":
 		toJson(ddbresult)
 	}
 }
 
-func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
-	var head_dup []string
-	for _, h := range ddbresult {
-		for k, _ := range h {
-			head_dup = append(head_dup, k)
+func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
+	w := csv.NewWriter(os.Stdout)
+	delm,_ := utf8.DecodeRuneInString(delimiter)
+	w.Comma = delm
+
+	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
+	// headをユニークなsliceにする
+	head := make([]string, 0, len(ddbresult))
+	encountered := map[string]bool{}
+	for _, v := range ddbresult {
+		for k, _ := range v {
+			if !encountered[k] {
+				encountered[k] = true
+				head = append(head, k)
+			}
 		}
 	}
-	head := removeDuplicate(head_dup)
+	// headerをsortしておおよそ同じ順に表示されるようにする
+	sort.Strings(head)
+
+	if header {
+		w.Write(head)
+		w.Flush()
+	}
 
 	var body_unit []string
 	for _, v := range ddbresult {
 		for _, h := range head {
-			_,ok := v[h]
+			// 存在しないキーの場合は、値を"_"にする
+			_, ok := v[h]
 			if ok {
 				body_unit = append(body_unit, fmt.Sprint(v[h]))
 			} else {
@@ -48,28 +65,14 @@ func xsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
 		body = append(body, body_unit)
 		body_unit = make([]string, 0)
 	}
-	if header {
-		fmt.Println(strings.Join(head, delimiter))
-	}
-	for _, b2 := range body {
-		fmt.Println(strings.Join(b2, delimiter))
+
+	for _, b := range body {
+		w.Write(b)
+		w.Flush()
 	}
 }
 
 func toJson(ddbresult []map[string]interface{}) {
 	jsonString, _ := json.Marshal(ddbresult)
 	fmt.Println(string(jsonString))
-}
-
-// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
-func removeDuplicate(args []string) []string {
-	results := make([]string, 0, len(args))
-	encountered := map[string]bool{}
-	for i := 0; i < len(args); i++ {
-		if !encountered[args[i]] {
-			encountered[args[i]] = true
-			results = append(results, args[i])
-		}
-	}
-	return results
 }
