@@ -4,7 +4,6 @@ import (
 	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
-	"fmt"
 )
 
 type QueryOption struct {

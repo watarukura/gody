@@ -52,11 +52,11 @@ func queryCmd() *cobra.Command {
 	options.BoolVar(&queryOption.Header, "header", false, "With Header")
 	options.Int64Var(&queryOption.Limit, "limit", 100, "Output limit")
 	options.StringVar(&queryOption.Index, "index", "", "GSI Name")
-	options.BoolVar(&queryOption.Eq, "eq", false, "GSI Query Parameter EQ")
-	options.BoolVar(&queryOption.Lt, "lt", false, "GSI Query Parameter LT")
-	options.BoolVar(&queryOption.Le, "le", false, "GSI Query Parameter LE")
-	options.BoolVar(&queryOption.Gt, "gt", false, "GSI Query Parameter GT")
-	options.BoolVar(&queryOption.Ge, "ge", false, "GSI Query Parameter GE")
+	options.BoolVar(&queryOption.Eq, "eq", false, "RangeKey Query Parameter EQ")
+	options.BoolVar(&queryOption.Lt, "lt", false, "RangeKey Query Parameter LT")
+	options.BoolVar(&queryOption.Le, "le", false, "RangeKey Query Parameter LE")
+	options.BoolVar(&queryOption.Gt, "gt", false, "RangeKey Query Parameter GT")
+	options.BoolVar(&queryOption.Ge, "ge", false, "RangeKey Query Parameter GE")
 
 	return cmd
 
