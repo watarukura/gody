@@ -39,6 +39,9 @@ func queryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "query",
 		Short: "query table",
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return validateParams(&queryOption)
+		},
 		Run: func(*cobra.Command, []string) {
 			gody.Query(&queryOption)
 		},

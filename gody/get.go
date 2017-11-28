@@ -6,8 +6,8 @@ import (
 )
 
 type GetItemOption struct {
-	TableName    string
-	PartitionKey string
+	TableName    string `validate:"required"`
+	PartitionKey string `validate:"required"`
 	SortKey      string
 	Format       string
 	Header       bool

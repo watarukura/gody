@@ -39,6 +39,9 @@ func getCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
 		Short: "Get one record",
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return validateParams(&getOption)
+		},
 		Run: func(*cobra.Command, []string) {
 			gody.Get(&getOption)
 		},

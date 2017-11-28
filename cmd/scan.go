@@ -39,6 +39,9 @@ func scanCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "scan",
 		Short: "scan table",
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return validateParams(&scanOption)
+		},
 		Run: func(*cobra.Command, []string) {
 			gody.Scan(&scanOption)
 		},

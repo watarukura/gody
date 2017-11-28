@@ -7,7 +7,7 @@ import (
 )
 
 type ScanOption struct {
-	TableName string
+	TableName string `validate:"required"`
 	Format    string
 	Header    bool
 	Limit     int64
