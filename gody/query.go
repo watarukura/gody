@@ -49,12 +49,35 @@ func buildCondition(table *dynamodb.Table, option *QueryOption) *dynamodb.Condit
 		log.Fatal("error to describe table")
 	}
 
-	cond.SetLimit(option.Limit)
-	pkey := design.GetHashKeyName();
+	cond.SetLimit(option.Limit);
+	var (
+		pkey string
+		skey string
+	)
+	if option.Index != "" {
+		cond.SetIndex(option.Index)
+		gsi := design.GSI;
+		for _, v := range gsi {
+			if *v.IndexName == option.Index {
+				keys := v.KeySchema
+				for _, vv := range keys {
+					if *vv.KeyType == "HASH" {
+						pkey = *vv.AttributeName
+					}
+					if *vv.KeyType == "RANGE" {
+						skey = *vv.AttributeName
+					}
+				}
+			}
+		}
+	} else {
+		pkey = design.GetHashKeyName();
+		skey = design.GetRangeKeyName();
+	}
+
 	cond.AndEQ(pkey, option.PartitionKey)
 
 	if design.HasRangeKey() {
-		skey := design.GetRangeKeyName();
 		switch {
 		case option.Eq == true:
 			cond.AndEQ(skey, option.SortKey);
