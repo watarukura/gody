@@ -16,7 +16,9 @@ $ go get github.com/watarukura/gody
 ```
 $ gody get --table <TableName> \
      --pkey <PartitionKey> \
-     --skey <SortKey>
+     --skey <SortKey> \
+     --format <ssv|csv|tsv|json> \
+     --header
 ```
 
 ### Query (PartitionKey, SortKey)
@@ -25,6 +27,8 @@ $ gody get --table <TableName> \
 $ gody query --table <TableName> \
      --pkey <PartitionKey> \
      --skey <SortKey> \
+     --format <ssv|csv|tsv|json> \
+     --header \
      --limit 10
 ```
 
@@ -35,6 +39,8 @@ $ gody query --table <TableName> \
      --pkey <PartitionKey> \
      --skey <SortKey> \
      --index <IndexName> \
+     --format <ssv|csv|tsv|json> \
+     --header \
      --limit 10
 
 ```
@@ -70,5 +76,7 @@ $ gody delete --table <TableName> \
 
 ```
 $ gody scan --table <TableName> \
+     --format <ssv|csv|tsv|json> \
+     --header \
      --limit 10
 ```
