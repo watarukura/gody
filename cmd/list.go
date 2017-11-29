@@ -20,10 +20,9 @@ import (
 )
 
 func init() {
-	RootCmd.AddCommand(listCmd())
 }
 
-func listCmd() *cobra.Command {
+func NewCmdList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List DynamoDB tables",
