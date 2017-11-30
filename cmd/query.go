@@ -49,6 +49,7 @@ func NewCmdQuery() *cobra.Command {
 	options.BoolVar(&queryOption.Le, "le", false, "RangeKey Query Parameter LE")
 	options.BoolVar(&queryOption.Gt, "gt", false, "RangeKey Query Parameter GT")
 	options.BoolVar(&queryOption.Ge, "ge", false, "RangeKey Query Parameter GE")
+	options.StringVar(&queryOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
 

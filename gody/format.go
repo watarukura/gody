@@ -37,9 +37,16 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fi
 	encountered := map[string]bool{}
 	for _, v := range ddbresult {
 		for k, _ := range v {
-			if !encountered[k] {
-				encountered[k] = true
-				head = append(head, k)
+			if len(fields) > 0 {
+				if !encountered[k] && Index(fields, k) > -1 {
+					encountered[k] = true
+					head = append(head, k)
+				}
+			} else {
+				if !encountered[k] {
+					encountered[k] = true
+					head = append(head, k)
+				}
 			}
 		}
 	}
@@ -75,4 +82,13 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fi
 func toJson(ddbresult []map[string]interface{}, fields []string) {
 	jsonString, _ := json.Marshal(ddbresult)
 	fmt.Println(string(jsonString))
+}
+
+func Index(vs []string, t string) int {
+	for i, v := range vs {
+		if v == t {
+			return i
+		}
+	}
+	return -1
 }

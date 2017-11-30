@@ -4,6 +4,7 @@ import (
 	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
+	"strings"
 )
 
 type ScanOption struct {
@@ -11,6 +12,7 @@ type ScanOption struct {
 	Format    string
 	Header    bool
 	Limit     int64
+	Field     string
 }
 
 func Scan(option *ScanOption) {
@@ -32,5 +34,11 @@ func Scan(option *ScanOption) {
 	}
 
 	result := query_result.ToSliceMap()
-	Format(result, option.Format, option.Header)
+
+	var fields []string
+	if option.Field != "" {
+		fields = strings.Split(option.Field, ",")
+	}
+
+	Format(result, option.Format, option.Header, fields)
 }

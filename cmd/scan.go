@@ -41,6 +41,7 @@ func NewCmdScan() *cobra.Command {
 	options.StringVar(&scanOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
 	options.BoolVar(&scanOption.Header, "header", false, "With Header")
 	options.Int64Var(&scanOption.Limit, "limit", 100, "Output limit")
+	options.StringVar(&scanOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
 

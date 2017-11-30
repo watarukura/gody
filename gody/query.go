@@ -4,6 +4,7 @@ import (
 	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
+	"strings"
 )
 
 type QueryOption struct {
@@ -19,6 +20,7 @@ type QueryOption struct {
 	Le           bool
 	Gt           bool
 	Ge           bool
+	Field        string
 }
 
 func Query(option *QueryOption) {
@@ -39,7 +41,13 @@ func Query(option *QueryOption) {
 	}
 
 	result := query_result.ToSliceMap()
-	Format(result, option.Format, option.Header)
+
+	var fields []string
+	if option.Field != "" {
+		fields = strings.Split(option.Field, ",")
+	}
+
+	Format(result, option.Format, option.Header, fields)
 }
 
 func buildCondition(table *dynamodb.Table, option *QueryOption) *dynamodb.ConditionList {
