@@ -12,7 +12,6 @@ func TestGet(t *testing.T) {
 		command string
 		want    string
 	}{
-		//{command: "gody get", want: "Get one record"},
 		{command: "gody get --pkey aaa", want: "Error: Parameter error: TableName is required"},
 	}
 

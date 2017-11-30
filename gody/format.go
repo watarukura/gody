@@ -13,22 +13,22 @@ var (
 	body [][]string
 )
 
-func Format(ddbresult []map[string]interface{}, format string, header bool) {
+func Format(ddbresult []map[string]interface{}, format string, header bool, fields []string) {
 	switch format {
 	case "ssv":
-		toXsv(ddbresult, header, " ")
+		toXsv(ddbresult, header, " ", fields)
 	case "csv":
-		toXsv(ddbresult, header, ",")
+		toXsv(ddbresult, header, ",", fields)
 	case "tsv":
-		toXsv(ddbresult, header, "\t")
+		toXsv(ddbresult, header, "\t", fields)
 	case "json":
-		toJson(ddbresult)
+		toJson(ddbresult, fields)
 	}
 }
 
-func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
+func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fields []string) {
 	w := csv.NewWriter(os.Stdout)
-	delm,_ := utf8.DecodeRuneInString(delimiter)
+	delm, _ := utf8.DecodeRuneInString(delimiter)
 	w.Comma = delm
 
 	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
@@ -72,7 +72,7 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string) {
 	}
 }
 
-func toJson(ddbresult []map[string]interface{}) {
+func toJson(ddbresult []map[string]interface{}, fields []string) {
 	jsonString, _ := json.Marshal(ddbresult)
 	fmt.Println(string(jsonString))
 }

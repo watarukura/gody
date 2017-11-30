@@ -42,6 +42,7 @@ func NewCmdGet() *cobra.Command {
 	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
 	options.StringVar(&getOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
 	options.BoolVar(&getOption.Header, "header", false, "With Header")
+	options.StringVar(&getOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
 

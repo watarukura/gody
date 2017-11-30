@@ -3,6 +3,7 @@ package gody
 import (
 	"log"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 type GetItemOption struct {
@@ -11,6 +12,7 @@ type GetItemOption struct {
 	SortKey      string
 	Format       string
 	Header       bool
+	Field        string
 }
 
 func Get(option *GetItemOption) {
@@ -36,5 +38,10 @@ func Get(option *GetItemOption) {
 	var result_slice []map[string]interface{}
 	result_slice = append(result_slice, result)
 
-	Format(result_slice, option.Format, option.Header)
+	var fields []string
+	if option.Field != "" {
+		fields = strings.Split(option.Field, ",")
+	}
+
+	Format(result_slice, option.Format, option.Header, fields)
 }
