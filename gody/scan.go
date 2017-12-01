@@ -33,6 +33,19 @@ func Scan(option *ScanOption) {
 		log.Fatal("error to scan")
 	}
 
+	var query_result_remain *dynamodb.QueryResult
+	for query_result.LastEvaluatedKey != nil {
+		startKey := query_result.LastEvaluatedKey
+		cond.SetStartKey(startKey)
+		query_result_remain,err = table.ScanWithCondition(cond)
+		if err != nil {
+			log.Fatal("error to scan for remain")
+		}
+		query_result.Items = append(query_result.Items, query_result_remain.Items...)
+		query_result.LastEvaluatedKey = query_result_remain.LastEvaluatedKey
+		query_result.Count += query_result.Count + query_result_remain.Count
+		query_result.ScannedCount += query_result.ScannedCount+ query_result_remain.ScannedCount
+	}
 	result := query_result.ToSliceMap()
 
 	var fields []string
