@@ -13,7 +13,7 @@ type QueryOption struct {
 	SortKey      string
 	Format       string
 	Header       bool
-	Limit        int64
+	Limit        int64  `validate:"min=0""`
 	Index        string
 	Eq           bool
 	Lt           bool
@@ -34,6 +34,10 @@ func Query(option *QueryOption) {
 	}
 
 	cond := buildCondition(table, option)
+	if option.Limit > 0 {
+		cond.SetLimit(option.Limit);
+	}
+
 	var query_result *dynamodb.QueryResult
 	query_result, err = table.Query(cond)
 	if err != nil {
@@ -41,17 +45,18 @@ func Query(option *QueryOption) {
 	}
 
 	var query_result_remain *dynamodb.QueryResult
+	// queryの結果が1MBを超えたときはLastEvaluatedKeyがセットされて、そこで切り上げられる
 	for query_result.LastEvaluatedKey != nil {
 		startKey := query_result.LastEvaluatedKey
 		cond.SetStartKey(startKey)
-		query_result_remain,err = table.ScanWithCondition(cond)
+		query_result_remain, err = table.ScanWithCondition(cond)
 		if err != nil {
 			log.Fatal("error to query for remain")
 		}
 		query_result.Items = append(query_result.Items, query_result_remain.Items...)
 		query_result.LastEvaluatedKey = query_result_remain.LastEvaluatedKey
 		query_result.Count += query_result.Count + query_result_remain.Count
-		query_result.ScannedCount += query_result.ScannedCount+ query_result_remain.ScannedCount
+		query_result.ScannedCount += query_result.ScannedCount + query_result_remain.ScannedCount
 	}
 	result := query_result.ToSliceMap()
 

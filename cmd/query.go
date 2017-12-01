@@ -42,7 +42,7 @@ func NewCmdQuery() *cobra.Command {
 	options.StringVar(&queryOption.SortKey, "skey", "", "Sort Key")
 	options.StringVar(&queryOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
 	options.BoolVar(&queryOption.Header, "header", false, "With Header")
-	options.Int64Var(&queryOption.Limit, "limit", 100, "Output limit")
+	options.Int64Var(&queryOption.Limit, "limit", 0, "Output limit (0 means all)")
 	options.StringVar(&queryOption.Index, "index", "", "GSI Name")
 	options.BoolVar(&queryOption.Eq, "eq", false, "RangeKey Query Parameter EQ")
 	options.BoolVar(&queryOption.Lt, "lt", false, "RangeKey Query Parameter LT")

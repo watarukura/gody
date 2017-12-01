@@ -40,7 +40,7 @@ func NewCmdScan() *cobra.Command {
 	options.StringVarP(&scanOption.TableName, "table", "T", "", "DynamoDB table name")
 	options.StringVar(&scanOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
 	options.BoolVar(&scanOption.Header, "header", false, "With Header")
-	options.Int64Var(&scanOption.Limit, "limit", 100, "Output limit")
+	options.Int64Var(&scanOption.Limit, "limit", 0, "Output limit (0 means all)")
 	options.StringVar(&scanOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
