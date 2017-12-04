@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"gopkg.in/go-playground/validator.v9"
 	"fmt"
+	"gopkg.in/go-playground/validator.v9"
 	"strings"
 )
 

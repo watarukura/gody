@@ -1,17 +1,17 @@
 package gody
 
 import (
-	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
-	"strings"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"strings"
 )
 
 type ScanOption struct {
 	TableName string `validate:"required"`
 	Format    string
 	Header    bool
-	Limit     int64  `validate:"min=0"`
+	Limit     int64 `validate:"min=0"`
 	Field     string
 }
 
@@ -25,9 +25,9 @@ func Scan(option *ScanOption, cmd *cobra.Command) {
 		cmd.Println("error to get table")
 	}
 
-	cond := table.NewConditionList();
+	cond := table.NewConditionList()
 	if option.Limit > 0 {
-		cond.SetLimit(option.Limit);
+		cond.SetLimit(option.Limit)
 	}
 
 	var query_result *dynamodb.QueryResult

@@ -1,8 +1,8 @@
 package gody
 
 import (
-	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"github.com/evalphobia/aws-sdk-go-wrapper/config"
+	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"log"
 )
 
