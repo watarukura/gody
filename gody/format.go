@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"encoding/json"
 	"encoding/csv"
-	"os"
 	"unicode/utf8"
 	"sort"
 	"github.com/spf13/cobra"
@@ -36,7 +35,7 @@ func Format(target FormatTarget) {
 }
 
 func toXsv(target FormatTarget, delimiter string) {
-	w := csv.NewWriter(os.Stdout)
+	w := csv.NewWriter(target.cmd.OutOrStdout())
 	delm, _ := utf8.DecodeRuneInString(delimiter)
 	w.Comma = delm
 
