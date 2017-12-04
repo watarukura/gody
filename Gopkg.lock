@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/dynamodb","service/sts"]
-  revision = "cd721c97ef6fcfcb76b4feb14fcfead57fb01e5e"
-  version = "v1.12.33"
+  revision = "388e6676807f5968ad5eaaec0c70002f80c20b84"
+  version = "v1.12.39"
 
 [[projects]]
   name = "github.com/evalphobia/aws-sdk-go-wrapper"
@@ -24,6 +24,18 @@
   packages = ["."]
   revision = "32e4c1e6bc4e7d0d8451aa6b75200d19e37a536a"
   version = "v1.32.0"
+
+[[projects]]
+  name = "github.com/go-playground/locales"
+  packages = [".","currency"]
+  revision = "e4cbcb5d0652150d40ad0646651076b6bd2be4f6"
+  version = "v0.11.2"
+
+[[projects]]
+  name = "github.com/go-playground/universal-translator"
+  packages = ["."]
+  revision = "b32fa301c9fe55953584134cb6853a13c87ec0a1"
+  version = "v0.16.0"
 
 [[projects]]
   branch = "master"
@@ -106,13 +118,19 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "a13efeb2fd213cf4be7227992aa54519af3b2ac0"
+  revision = "8b4580aae2a0dd0c231a45d3ccb8434ff533b840"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
-  revision = "88f656faf3f37f690df1a32515b479415e1a6769"
+  revision = "556d234e9c5239918de4d1fe247d1fe004e71764"
+
+[[projects]]
+  name = "gopkg.in/go-playground/validator.v9"
+  packages = ["."]
+  revision = "61caf9d3038e1af346dbf5c2e16f6678e1548364"
+  version = "v9.9.0"
 
 [[projects]]
   branch = "v2"
@@ -123,6 +141,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "41029dd5b3d04ff3998d7f6f2be28748a19c9c95081803f9f2cd6af6755a54d6"
+  inputs-digest = "be26a79ffcd1578d96079786d7b17bcc0374b09f6e50bb2a1e9cd5eee92e1e5f"
   solver-name = "gps-cdcl"
   solver-version = 1

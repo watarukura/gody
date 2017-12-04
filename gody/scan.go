@@ -1,28 +1,28 @@
 package gody
 
 import (
-	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"strings"
+	"github.com/spf13/cobra"
 )
 
 type ScanOption struct {
 	TableName string `validate:"required"`
 	Format    string
 	Header    bool
-	Limit     int64  `validate:"min=0""`
+	Limit     int64  `validate:"min=0"`
 	Field     string
 }
 
-func Scan(option *ScanOption) {
+func Scan(option *ScanOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
-		log.Fatal("error to get table")
+		cmd.Println("error to get table")
 	}
 
 	cond := table.NewConditionList();
@@ -33,7 +33,7 @@ func Scan(option *ScanOption) {
 	var query_result *dynamodb.QueryResult
 	query_result, err = table.ScanWithCondition(cond)
 	if err != nil {
-		log.Fatal("error to scan")
+		cmd.Println("error to scan")
 	}
 
 	var query_result_remain *dynamodb.QueryResult
@@ -43,7 +43,7 @@ func Scan(option *ScanOption) {
 		cond.SetStartKey(startKey)
 		query_result_remain, err = table.ScanWithCondition(cond)
 		if err != nil {
-			log.Fatal("error to scan for remain")
+			cmd.Println("error to scan for remain")
 		}
 		query_result.Items = append(query_result.Items, query_result_remain.Items...)
 		query_result.LastEvaluatedKey = query_result_remain.LastEvaluatedKey
@@ -57,5 +57,12 @@ func Scan(option *ScanOption) {
 		fields = strings.Split(option.Field, ",")
 	}
 
-	Format(result, option.Format, option.Header, fields)
+	var formatTarget = FormatTarget{
+		ddbresult: result,
+		format:    option.Format,
+		header:    option.Header,
+		fields:    fields,
+		cmd:       cmd,
+	}
+	Format(formatTarget)
 }

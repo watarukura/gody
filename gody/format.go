@@ -7,38 +7,47 @@ import (
 	"os"
 	"unicode/utf8"
 	"sort"
+	"github.com/spf13/cobra"
 )
+
+type FormatTarget struct {
+	ddbresult []map[string]interface{}
+	format    string
+	header    bool
+	fields    []string
+	cmd       *cobra.Command
+}
 
 var (
 	body [][]string
 )
 
-func Format(ddbresult []map[string]interface{}, format string, header bool, fields []string) {
-	switch format {
+func Format(target FormatTarget) {
+	switch target.format {
 	case "ssv":
-		toXsv(ddbresult, header, " ", fields)
+		toXsv(target, " ")
 	case "csv":
-		toXsv(ddbresult, header, ",", fields)
+		toXsv(target, ",")
 	case "tsv":
-		toXsv(ddbresult, header, "\t", fields)
+		toXsv(target, "\t")
 	case "json":
-		toJson(ddbresult, fields)
+		toJson(target)
 	}
 }
 
-func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fields []string) {
+func toXsv(target FormatTarget, delimiter string) {
 	w := csv.NewWriter(os.Stdout)
 	delm, _ := utf8.DecodeRuneInString(delimiter)
 	w.Comma = delm
 
 	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
 	// headをユニークなsliceにする
-	head := make([]string, 0, len(ddbresult))
+	head := make([]string, 0, len(target.ddbresult))
 	encountered := map[string]bool{}
-	for _, v := range ddbresult {
+	for _, v := range target.ddbresult {
 		for k, _ := range v {
-			if len(fields) > 0 {
-				if !encountered[k] && Index(fields, k) > -1 {
+			if len(target.fields) > 0 {
+				if !encountered[k] && Index(target.fields, k) > -1 {
 					encountered[k] = true
 					head = append(head, k)
 				}
@@ -53,13 +62,13 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fi
 	// headerをsortしておおよそ同じ順に表示されるようにする
 	sort.Strings(head)
 
-	if header {
+	if target.header {
 		w.Write(head)
 		w.Flush()
 	}
 
 	var body_unit []string
-	for _, v := range ddbresult {
+	for _, v := range target.ddbresult {
 		for _, h := range head {
 			// 存在しないキーの場合は、値を"_"にする
 			_, ok := v[h]
@@ -79,9 +88,9 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fi
 	}
 }
 
-func toJson(ddbresult []map[string]interface{}, fields []string) {
-	jsonString, _ := json.Marshal(ddbresult)
-	fmt.Println(string(jsonString))
+func toJson(target FormatTarget) {
+	jsonString, _ := json.Marshal(target.ddbresult)
+	target.cmd.Println(string(jsonString))
 }
 
 func Index(vs []string, t string) int {

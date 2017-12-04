@@ -31,8 +31,8 @@ func NewCmdGet() *cobra.Command {
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return validateParams(&getOption)
 		},
-		Run: func(*cobra.Command, []string) {
-			gody.Get(&getOption)
+		Run: func(cmd *cobra.Command, args []string) {
+			gody.Get(&getOption, cmd)
 		},
 	}
 

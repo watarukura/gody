@@ -31,8 +31,8 @@ func NewCmdScan() *cobra.Command {
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return validateParams(&scanOption)
 		},
-		Run: func(*cobra.Command, []string) {
-			gody.Scan(&scanOption)
+		Run: func(cmd *cobra.Command, args []string) {
+			gody.Scan(&scanOption, cmd)
 		},
 	}
 

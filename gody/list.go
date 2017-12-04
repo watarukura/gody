@@ -1,21 +1,20 @@
 package gody
 
 import (
-	"log"
-	"fmt"
 	"github.com/spf13/viper"
+	"github.com/spf13/cobra"
 )
 
-func List() {
+func List(cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
 	)
 	tables, err := svc.ListTables()
 	if err != nil {
-		log.Fatal("error to list tables")
+		cmd.Println("error to list tables")
 	}
 	for _, table := range tables {
-		fmt.Println(table)
+		cmd.Println(table)
 	}
 }

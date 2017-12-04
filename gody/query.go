@@ -1,10 +1,10 @@
 package gody
 
 import (
-	"log"
 	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"strings"
+	"github.com/spf13/cobra"
 )
 
 type QueryOption struct {
@@ -13,7 +13,7 @@ type QueryOption struct {
 	SortKey      string
 	Format       string
 	Header       bool
-	Limit        int64  `validate:"min=0""`
+	Limit        int64  `validate:"min=0"`
 	Index        string
 	Eq           bool
 	Lt           bool
@@ -23,17 +23,17 @@ type QueryOption struct {
 	Field        string
 }
 
-func Query(option *QueryOption) {
+func Query(option *QueryOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
-		log.Fatal("error to get table")
+		cmd.Println("error to get table")
 	}
 
-	cond := buildCondition(table, option)
+	cond := buildCondition(table, option, cmd)
 	if option.Limit > 0 {
 		cond.SetLimit(option.Limit);
 	}
@@ -41,7 +41,7 @@ func Query(option *QueryOption) {
 	var query_result *dynamodb.QueryResult
 	query_result, err = table.Query(cond)
 	if err != nil {
-		log.Fatal("error to query")
+		cmd.Println("error to query")
 	}
 
 	var query_result_remain *dynamodb.QueryResult
@@ -51,7 +51,7 @@ func Query(option *QueryOption) {
 		cond.SetStartKey(startKey)
 		query_result_remain, err = table.ScanWithCondition(cond)
 		if err != nil {
-			log.Fatal("error to query for remain")
+			cmd.Println("error to query for remain")
 		}
 		query_result.Items = append(query_result.Items, query_result_remain.Items...)
 		query_result.LastEvaluatedKey = query_result_remain.LastEvaluatedKey
@@ -65,14 +65,21 @@ func Query(option *QueryOption) {
 		fields = strings.Split(option.Field, ",")
 	}
 
-	Format(result, option.Format, option.Header, fields)
+	var formatTarget = FormatTarget{
+		ddbresult: result,
+		format:    option.Format,
+		header:    option.Header,
+		fields:    fields,
+		cmd:       cmd,
+	}
+	Format(formatTarget)
 }
 
-func buildCondition(table *dynamodb.Table, option *QueryOption) *dynamodb.ConditionList {
+func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Command) *dynamodb.ConditionList {
 	cond := table.NewConditionList();
 	design, err := table.Design();
 	if err != nil {
-		log.Fatal("error to describe table")
+		cmd.Println("error to describe table")
 	}
 
 	cond.SetLimit(option.Limit);

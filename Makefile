@@ -4,13 +4,21 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
+GOVET=$(GOCMD) vet
+GOLINT=golint
+GOFMT=gofmt
+DEPCMD=dep
+DEPENSURE=$(DEPCMD) ensure
 BINARY_NAME=bin/gody
 BINARY_UNIX=$(BINARY_NAME)_unix
 
-all: test build
+all: test clean build
 build:
 		$(GOBUILD) -o $(BINARY_NAME) -v
 test:
+		$(GOFMT) $(go list ./... | grep -v /vendor/)
+		$(GOLINT) $(go list ./... | grep -v /vendor/)
+		$(GOVET) $(go list ./... | grep -v /vendor/)
 		$(GOTEST) -v ./...
 clean:
 		$(GOCLEAN)
@@ -21,6 +29,7 @@ run:
 		./$(BINARY_NAME)
 deps:
 		$(GOGET) -d -v .
+		$(DEPENSURE) -update
 
 ## Cross compilation
 #build-linux:

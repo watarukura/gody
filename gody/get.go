@@ -1,9 +1,9 @@
 package gody
 
 import (
-	"log"
 	"github.com/spf13/viper"
 	"strings"
+	"github.com/spf13/cobra"
 )
 
 type GetItemOption struct {
@@ -15,14 +15,14 @@ type GetItemOption struct {
 	Field        string
 }
 
-func Get(option *GetItemOption) {
+func Get(option *GetItemOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
-		log.Fatal("error to get table")
+		cmd.Println("error to get table")
 	}
 
 	var result map[string]interface{}
@@ -32,7 +32,7 @@ func Get(option *GetItemOption) {
 		result, err = table.GetOne(option.PartitionKey, option.SortKey)
 	}
 	if err != nil {
-		log.Fatal("error to get item")
+		cmd.Println("error to get item")
 	}
 
 	var result_slice []map[string]interface{}
@@ -43,5 +43,12 @@ func Get(option *GetItemOption) {
 		fields = strings.Split(option.Field, ",")
 	}
 
-	Format(result_slice, option.Format, option.Header, fields)
+	var formatTarget = FormatTarget{
+		ddbresult: result_slice,
+		format:    option.Format,
+		header:    option.Header,
+		fields:    fields,
+		cmd:       cmd,
+	}
+	Format(formatTarget)
 }

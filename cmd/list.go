@@ -26,8 +26,8 @@ func NewCmdList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List DynamoDB tables",
-		Run:   func(cmd *cobra.Command, args []string) {
-			gody.List()
+		Run: func(cmd *cobra.Command, args []string) {
+			gody.List(cmd)
 		},
 	}
 	return cmd
