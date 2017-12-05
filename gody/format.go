@@ -86,8 +86,8 @@ func toXsv(target FormatTarget, delimiter string) {
 func toJson(target FormatTarget) {
 	var jsonString []byte
 	if len(target.fields) > 0 {
-		m := map[string]interface{}{}
-		var marr []map[string]interface{}
+		m := make(map[string]interface{}, len(target.fields))
+		marr := []map[string]interface{}{}
 		for _, v := range target.ddbresult {
 			for _, f := range target.fields {
 				_, ok := v[f]
