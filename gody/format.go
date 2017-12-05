@@ -39,12 +39,12 @@ func toXsv(target FormatTarget, delimiter string) {
 	delm, _ := utf8.DecodeRuneInString(delimiter)
 	w.Comma = delm
 
-	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
-	// headをユニークなsliceにする
 	head := make([]string, 0, len(target.ddbresult))
 	if len(target.fields) > 0 {
 		head = target.fields
 	} else {
+		// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
+		// headをユニークなsliceにする
 		encountered := map[string]bool{}
 		for _, v := range target.ddbresult {
 			for k := range v {
