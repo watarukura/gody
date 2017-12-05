@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestGet(t *testing.T) {
+func TestCmdGet(t *testing.T) {
 	cases := []struct {
 		command string
 		want    string

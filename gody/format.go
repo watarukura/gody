@@ -17,10 +17,6 @@ type FormatTarget struct {
 	cmd       *cobra.Command
 }
 
-var (
-	body [][]string
-)
-
 func Format(target FormatTarget) {
 	switch target.format {
 	case "ssv":
@@ -63,7 +59,10 @@ func toXsv(target FormatTarget, delimiter string) {
 		w.Flush()
 	}
 
-	var body_unit []string
+	var (
+		body [][]string
+	)
+	body_unit := make([]string, len(head))
 	for _, v := range target.ddbresult {
 		for _, h := range head {
 			// 存在しないキーの場合は、値を"_"にする
@@ -75,7 +74,7 @@ func toXsv(target FormatTarget, delimiter string) {
 			}
 		}
 		body = append(body, body_unit)
-		body_unit = make([]string, 0)
+		body_unit = make([]string, len(head))
 	}
 
 	for _, b := range body {

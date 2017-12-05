@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestScan(t *testing.T) {
+func TestCmdScan(t *testing.T) {
 	cases := []struct {
 		command string
 		want    string
