@@ -42,24 +42,21 @@ func toXsv(target FormatTarget, delimiter string) {
 	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
 	// headをユニークなsliceにする
 	head := make([]string, 0, len(target.ddbresult))
-	encountered := map[string]bool{}
-	for _, v := range target.ddbresult {
-		for k := range v {
-			if len(target.fields) > 0 {
-				if !encountered[k] && Index(target.fields, k) > -1 {
-					encountered[k] = true
-					head = append(head, k)
-				}
-			} else {
+	if len(target.fields) > 0 {
+		head = target.fields
+	} else {
+		encountered := map[string]bool{}
+		for _, v := range target.ddbresult {
+			for k := range v {
 				if !encountered[k] {
 					encountered[k] = true
 					head = append(head, k)
 				}
 			}
 		}
+		// headerをsortしておおよそ同じ順に表示されるようにする
+		sort.Strings(head)
 	}
-	// headerをsortしておおよそ同じ順に表示されるようにする
-	sort.Strings(head)
 
 	if target.header {
 		w.Write(head)
