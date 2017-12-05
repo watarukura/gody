@@ -1,12 +1,12 @@
 package gody
 
 import (
-	"fmt"
-	"encoding/json"
 	"encoding/csv"
-	"unicode/utf8"
-	"sort"
+	"encoding/json"
+	"fmt"
 	"github.com/spf13/cobra"
+	"sort"
+	"unicode/utf8"
 )
 
 type FormatTarget struct {
@@ -44,7 +44,7 @@ func toXsv(target FormatTarget, delimiter string) {
 	head := make([]string, 0, len(target.ddbresult))
 	encountered := map[string]bool{}
 	for _, v := range target.ddbresult {
-		for k, _ := range v {
+		for k := range v {
 			if len(target.fields) > 0 {
 				if !encountered[k] && Index(target.fields, k) > -1 {
 					encountered[k] = true

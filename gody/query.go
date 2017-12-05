@@ -1,10 +1,10 @@
 package gody
 
 import (
-	"github.com/spf13/viper"
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
-	"strings"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"strings"
 )
 
 type QueryOption struct {
@@ -13,7 +13,7 @@ type QueryOption struct {
 	SortKey      string
 	Format       string
 	Header       bool
-	Limit        int64  `validate:"min=0"`
+	Limit        int64 `validate:"min=0"`
 	Index        string
 	Eq           bool
 	Lt           bool
@@ -35,7 +35,7 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 
 	cond := buildCondition(table, option, cmd)
 	if option.Limit > 0 {
-		cond.SetLimit(option.Limit);
+		cond.SetLimit(option.Limit)
 	}
 
 	var query_result *dynamodb.QueryResult
@@ -76,20 +76,20 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 }
 
 func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Command) *dynamodb.ConditionList {
-	cond := table.NewConditionList();
-	design, err := table.Design();
+	cond := table.NewConditionList()
+	design, err := table.Design()
 	if err != nil {
 		cmd.Println("error to describe table")
 	}
 
-	cond.SetLimit(option.Limit);
+	cond.SetLimit(option.Limit)
 	var (
 		pkey string
 		skey string
 	)
 	if option.Index != "" {
 		cond.SetIndex(option.Index)
-		gsi := design.GSI;
+		gsi := design.GSI
 		for _, v := range gsi {
 			if *v.IndexName == option.Index {
 				keys := v.KeySchema
@@ -104,8 +104,8 @@ func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Comma
 			}
 		}
 	} else {
-		pkey = design.GetHashKeyName();
-		skey = design.GetRangeKeyName();
+		pkey = design.GetHashKeyName()
+		skey = design.GetRangeKeyName()
 	}
 
 	cond.AndEQ(pkey, option.PartitionKey)
@@ -113,22 +113,22 @@ func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Comma
 	if skey != "" && option.SortKey != "" {
 		switch {
 		case option.Eq == true:
-			cond.AndEQ(skey, option.SortKey);
-			break;
+			cond.AndEQ(skey, option.SortKey)
+			break
 		case option.Lt == true:
-			cond.AndLT(skey, option.SortKey);
-			break;
+			cond.AndLT(skey, option.SortKey)
+			break
 		case option.Le == true:
-			cond.AndLE(skey, option.SortKey);
-			break;
+			cond.AndLE(skey, option.SortKey)
+			break
 		case option.Gt == true:
-			cond.AndGT(skey, option.SortKey);
-			break;
+			cond.AndGT(skey, option.SortKey)
+			break
 		case option.Ge == true:
-			cond.AndGE(skey, option.SortKey);
-			break;
+			cond.AndGE(skey, option.SortKey)
+			break
 		default:
-			break;
+			break
 		}
 	}
 
