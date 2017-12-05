@@ -30,12 +30,30 @@ func TestFormat(t *testing.T) {
 		cmd:       cmd,
 	}
 
+	var formatTarget3 = FormatTarget{
+		ddbresult: marr,
+		header:    true,
+		format:    "json",
+		fields:    []string{},
+		cmd:       cmd,
+	}
+
+	var formatTarget4 = FormatTarget{
+		ddbresult: marr,
+		header:    true,
+		format:    "json",
+		fields:    []string{"name", "jan"},
+		cmd:       cmd,
+	}
+
 	cases := []struct {
 		input FormatTarget
 		want  string
 	}{
 		{input: formatTarget1, want: "name jan"},
 		{input: formatTarget2, want: "jan name price"},
+		{input: formatTarget3, want: "[{\"jan\":\"4937751121103\",\"name\":\"つぼキーク\",\"price\":2000}]"},
+		{input: formatTarget4, want: "[{\"jan\":\"4937751121103\",\"name\":\"つぼキーク\"}]"},
 	}
 
 	for _, c := range cases {

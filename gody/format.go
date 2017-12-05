@@ -84,7 +84,24 @@ func toXsv(target FormatTarget, delimiter string) {
 }
 
 func toJson(target FormatTarget) {
-	jsonString, _ := json.Marshal(target.ddbresult)
+	var jsonString []byte
+	if len(target.fields) > 0 {
+		m := map[string]interface{}{}
+		var marr []map[string]interface{}
+		for _, v := range target.ddbresult {
+			for _, f := range target.fields {
+				_, ok := v[f]
+				if ok {
+					m[f] = v[f]
+				}
+			}
+			marr = append(marr, m)
+			m = map[string]interface{}{}
+		}
+		jsonString, _ = json.Marshal(marr)
+	} else {
+		jsonString, _ = json.Marshal(target.ddbresult)
+	}
 	target.cmd.Println(string(jsonString))
 }
 
