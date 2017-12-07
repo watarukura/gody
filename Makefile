@@ -6,6 +6,7 @@ GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOVET=$(GOCMD) vet
 GOLINT=golint
+GOX=gox
 DEPCMD=dep
 DEPENSURE=$(DEPCMD) ensure
 BINARY_NAME=bin/gody
@@ -13,7 +14,8 @@ BINARY_UNIX=$(BINARY_NAME)_unix
 
 all: test clean build
 build:
-		$(GOBUILD) -o $(BINARY_NAME) -v
+		$(GOX) --osarch "darwin/amd64 linux/amd64" -output="bin/{{.OS}}_{{.Arch}}/$(BINARY_NAME)"
+
 test:
 		find . -type f -name "*.go" | grep -v "^./vendor" | xargs gofmt -d -e -s -w -l
 		$(GOLINT) $(go list ./... | grep -v /vendor/)
