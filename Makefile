@@ -1,6 +1,7 @@
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
+GOINSTALL=$(GOCMD) install
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
@@ -9,12 +10,14 @@ GOLINT=golint
 GOX=gox
 DEPCMD=dep
 DEPENSURE=$(DEPCMD) ensure
-BINARY_NAME=bin/gody
-BINARY_UNIX=$(BINARY_NAME)_unix
+BINARY_NAME=gody
 
 all: test clean build
 build:
-		$(GOX) --osarch "darwin/amd64 linux/amd64" -output="bin/{{.OS}}_{{.Arch}}/$(BINARY_NAME)"
+		$(GOX) --osarch "darwin/amd64 linux/amd64 windows/amd64" -output="bin/{{.OS}}_{{.Arch}}/$(BINARY_NAME)"
+
+install:
+		$(GOINSTALL)
 
 test:
 		find . -type f -name "*.go" | grep -v "^./vendor" | xargs gofmt -d -e -s -w -l
@@ -23,8 +26,8 @@ test:
 		$(GOTEST) -v ./...
 clean:
 		$(GOCLEAN)
-		rm -f $(BINARY_NAME)
-		rm -f $(BINARY_UNIX)
+		rm -rf bin/
+
 run:
 		$(GOBUILD) -o $(BINARY_NAME) -v ./...
 		./$(BINARY_NAME)

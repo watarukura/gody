@@ -50,6 +50,7 @@ func NewCmdRoot() *cobra.Command {
 	cmd.AddCommand(NewCmdGet())
 	cmd.AddCommand(NewCmdQuery())
 	cmd.AddCommand(NewCmdScan())
+	cmd.AddCommand(NewCmdPut())
 
 	return cmd
 }
