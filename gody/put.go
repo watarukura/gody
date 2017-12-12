@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"unicode/utf8"
@@ -80,7 +79,6 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 	)
 	csvReader = csv.NewReader(reader)
 	delm, _ := utf8.DecodeLastRuneInString(delimiter)
-	fmt.Println(delm)
 	csvReader.Comma = delm
 	// ダブルクォートを厳密にチェックしない
 	csvReader.LazyQuotes = true
