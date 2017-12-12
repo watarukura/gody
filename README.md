@@ -58,10 +58,9 @@ $ gody update --table <TableName> \
 
 ```
 $ gody put --table <TableName> \
-     --pkey <PartitionKey> \
-     --skey <SortKey> \
-     --set {}
-       
+     --format <ssv|csv|tsv|json> \
+     --file <FilePath>
+
 ```
 
 ### Delete
@@ -72,7 +71,7 @@ $ gody delete --table <TableName> \
      --skey <SortKey>
 ```
 
-### scan
+### Scan
 
 ```
 $ gody scan --table <TableName> \

@@ -15,10 +15,8 @@ BINARY_NAME=gody
 all: test clean build
 build:
 		$(GOX) --osarch "darwin/amd64 linux/amd64 windows/amd64" -output="bin/{{.OS}}_{{.Arch}}/$(BINARY_NAME)"
-
 install:
 		$(GOINSTALL)
-
 test:
 		find . -type f -name "*.go" | grep -v "^./vendor" | xargs gofmt -d -e -s -w -l
 		$(GOLINT) $(go list ./... | grep -v /vendor/)
@@ -27,10 +25,9 @@ test:
 clean:
 		$(GOCLEAN)
 		rm -rf bin/
-
-run:
-		$(GOBUILD) -o $(BINARY_NAME) -v ./...
-		./$(BINARY_NAME)
+#run:
+#		$(GOBUILD) -o $(BINARY_NAME) -v ./...
+#		./$(BINARY_NAME)
 deps:
 		$(GOGET) -d -v .
 		$(DEPENSURE) -update

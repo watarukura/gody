@@ -4,12 +4,14 @@ import (
 	"bufio"
 	"encoding/csv"
 	"encoding/json"
-	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"fmt"
 	"io"
 	"os"
 	"unicode/utf8"
+
+	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 type PutItemOption struct {
@@ -74,26 +76,29 @@ func buildAttribute(option *PutItemOption, cmd *cobra.Command) []map[string]inte
 func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd *cobra.Command) []map[string]interface{} {
 	var (
 		csvReader *csv.Reader
-		attr      map[string]interface{}
 		attrs     []map[string]interface{}
 	)
-	delm, _ := utf8.DecodeLastRuneInString(delimiter)
-	csvReader.Comma = delm
-
 	csvReader = csv.NewReader(reader)
+	delm, _ := utf8.DecodeLastRuneInString(delimiter)
+	fmt.Println(delm)
+	csvReader.Comma = delm
+	// ダブルクォートを厳密にチェックしない
+	csvReader.LazyQuotes = true
+
 	csvAll, err := csvReader.ReadAll()
 	if err != nil {
 		cmd.Println("failed to read csv file")
 	}
 	header := csvAll[0]
 	body := csvAll[1:]
-	attr = map[string]interface{}{}
+	attr := map[string]interface{}{}
 
 	for _, line := range body {
 		for i, field := range line {
 			attr[header[i]] = field
 		}
 		attrs = append(attrs, attr)
+		attr = map[string]interface{}{}
 	}
 	return attrs
 }
@@ -120,7 +125,7 @@ func fromJson(option *PutItemOption, reader *bufio.Reader, cmd *cobra.Command) [
 		err = json.Unmarshal(line, &attr)
 
 		if err != nil {
-			cmd.Println("unvalid json")
+			cmd.Println("invalid json")
 		}
 		attrs = append(attrs, attr)
 	}
