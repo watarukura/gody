@@ -67,7 +67,7 @@ func buildAttribute(option *PutItemOption, cmd *cobra.Command) []map[string]inte
 	case "tsv":
 		attrs = fromXsv(option, reader, "\t", cmd)
 	case "json":
-		attrs = fromJson(option, reader, cmd)
+		attrs = fromJSON(option, reader, cmd)
 	}
 	return attrs
 }
@@ -93,6 +93,9 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 
 	for _, line := range body {
 		for i, field := range line {
+			if field == "_" {
+				continue
+			}
 			attr[header[i]] = field
 		}
 		attrs = append(attrs, attr)
@@ -101,10 +104,10 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 	return attrs
 }
 
-func fromJson(option *PutItemOption, reader *bufio.Reader, cmd *cobra.Command) []map[string]interface{} {
+func fromJSON(option *PutItemOption, reader *bufio.Reader, cmd *cobra.Command) []map[string]interface{} {
 	attrs := []map[string]interface{}{}
 	attr := map[string]interface{}{}
-	line_count := 0
+	lineCount := 0
 	var err error
 
 	for {
@@ -115,7 +118,7 @@ func fromJson(option *PutItemOption, reader *bufio.Reader, cmd *cobra.Command) [
 		if err != nil {
 			cmd.Println("failed to read json")
 		}
-		line_count++
+		lineCount++
 		if len(line) == 0 {
 			continue
 		}

@@ -60,7 +60,21 @@ $ gody update --table <TableName> \
 $ gody put --table <TableName> \
      --format <ssv|csv|tsv|json> \
      --file <FilePath>
+```
 
+```
+$ cat put.csv
+jan,name,price
+4515438304003,茶こし共柄,500
+4571277751224,スパイダージェル　500ml,_
+$ cat put.csv |
+> gody put --table item --format csv
+$ gody get --table item --format csv --pkey 4515438304003 --header --field jan,name,price
+jan,name,price
+4515438304003,茶こし共柄,500
+$ gody get --table item --format csv --pkey 4571277751224 --header --field jan,name,price
+jan,name,price
+4571277751224,スパイダージェル　500ml,_
 ```
 
 ### Delete
