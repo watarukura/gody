@@ -25,7 +25,7 @@ func TestPut(t *testing.T) {
 		0777,
 	)
 
-	m1 := map[string]interface{}{"jan": "4515438304003", "name": "茶こし共柄", "price": 500}
+	m1 := map[string]interface{}{"jan": "4515438304003", "name": "茶こし共柄", "price": "500"}
 	var marr1 []map[string]interface{}
 	marr1 = append(marr1, m1)
 
@@ -48,7 +48,7 @@ func TestPut(t *testing.T) {
 
 		fmt.Printf("get %+v\n", get)
 
-		if reflect.DeepEqual(c.want[0], get[0]) {
+		if !reflect.DeepEqual(c.want[0], get[0]) {
 			t.Errorf("unexpected response: want:%+v, get:%+v", c.want, get)
 		}
 	}
