@@ -93,7 +93,7 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 
 	for _, line := range body {
 		for i, field := range line {
-			if field == "_" {
+			if field == "_" || field == "" {
 				continue
 			}
 			attr[header[i]] = field

@@ -20,6 +20,7 @@ func TestPut(t *testing.T) {
 
 	c1 := "jan,name,price\n4515438304003,茶こし共柄,500"
 	c2 := "jan,name,price\n4515438304003,茶こし共柄,500\n4571277751224,スパイダージェル　500ml,_"
+	c3 := "jan,name,price\n4515438304003,茶こし共柄,500\n4571277751224,スパイダージェル　500ml,_\n0027084057492,,1000"
 	tmpc1 := filepath.Join(tmpdir, "put-test1.csv")
 	ioutil.WriteFile(
 		tmpc1,
@@ -32,13 +33,22 @@ func TestPut(t *testing.T) {
 		[]byte(c2),
 		0777,
 	)
+	tmpc3 := filepath.Join(tmpdir, "put-test3.csv")
+	ioutil.WriteFile(
+		tmpc3,
+		[]byte(c3),
+		0777,
+	)
 
 	m1 := map[string]interface{}{"jan": "4515438304003", "name": "茶こし共柄", "price": "500"}
 	m2 := map[string]interface{}{"jan": "4571277751224", "name": "スパイダージェル　500ml"}
+	m3 := map[string]interface{}{"jan": "0027084057492", "price": "1000"}
 	var marr1 []map[string]interface{}
 	var marr2 []map[string]interface{}
+	var marr3 []map[string]interface{}
 	marr1 = append(marr1, m1)
 	marr2 = append(marr1, m2)
+	marr3 = append(marr2, m3)
 
 	var putItemOption1 = PutItemOption{
 		TableName: "item",
@@ -52,12 +62,19 @@ func TestPut(t *testing.T) {
 		File:      tmpc2,
 	}
 
+	var putItemOption3 = PutItemOption{
+		TableName: "item",
+		Format:    "csv",
+		File:      tmpc3,
+	}
+
 	cases := []struct {
 		input *PutItemOption
 		want  []map[string]interface{}
 	}{
 		{input: &putItemOption1, want: marr1},
 		{input: &putItemOption2, want: marr2},
+		{input: &putItemOption3, want: marr3},
 	}
 
 	for _, c := range cases {
