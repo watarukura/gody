@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"reflect"
 	"unicode/utf8"
 
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
@@ -135,11 +136,16 @@ func fromJSON(option *PutItemOption, reader LineReader, cmd *cobra.Command) []ma
 			cmd.Println("invalid json")
 		}
 
-		fmt.Printf("%#v\n", v)
-
-		for _, attr := range v.([]interface{}) {
-			fmt.Println(attr)
-			attrs = append(attrs, attr.(map[string]interface{}))
+		// JSONの配列の場合は[]map[string]interface
+		// JSONの場合はmap[string]interface
+		// TODO:型名を文字列にして比較はダサいのでどうにかしたい
+		vType := fmt.Sprint(reflect.TypeOf(v))
+		if vType == "map[string]interface {}" {
+			attrs = append(attrs, v.(map[string]interface{}))
+		} else {
+			for _, attr := range v.([]interface{}) {
+				attrs = append(attrs, attr.(map[string]interface{}))
+			}
 		}
 	}
 	return attrs
