@@ -1,9 +1,10 @@
 package gody
 
 import (
+	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 type GetItemOption struct {
@@ -35,8 +36,8 @@ func Get(option *GetItemOption, cmd *cobra.Command) {
 		cmd.Println("error to get item")
 	}
 
-	var result_slice []map[string]interface{}
-	result_slice = append(result_slice, result)
+	var resultSlice []map[string]interface{}
+	resultSlice = append(resultSlice, result)
 
 	var fields []string
 	if option.Field != "" {
@@ -44,7 +45,7 @@ func Get(option *GetItemOption, cmd *cobra.Command) {
 	}
 
 	var formatTarget = FormatTarget{
-		ddbresult: result_slice,
+		ddbresult: resultSlice,
 		format:    option.Format,
 		header:    option.Header,
 		fields:    fields,
