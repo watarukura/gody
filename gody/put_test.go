@@ -21,6 +21,7 @@ func TestPut(t *testing.T) {
 	c1 := "jan,name,price\n4515438304003,茶こし共柄,500"
 	c2 := "jan,name,price\n4515438304003,茶こし共柄,500\n4571277751224,スパイダージェル　500ml,_"
 	c3 := "jan,name,price\n4515438304003,茶こし共柄,500\n4571277751224,スパイダージェル　500ml,_\n0027084057492,,1000"
+	c4 := "[{\"jan\":\"4515438304003\",\"name\":\"茶こし共柄\",\"price\":\"500\"}]"
 	tmpc1 := filepath.Join(tmpdir, "put-test1.csv")
 	ioutil.WriteFile(
 		tmpc1,
@@ -37,6 +38,12 @@ func TestPut(t *testing.T) {
 	ioutil.WriteFile(
 		tmpc3,
 		[]byte(c3),
+		0777,
+	)
+	tmpc4 := filepath.Join(tmpdir, "put-test4.json")
+	ioutil.WriteFile(
+		tmpc4,
+		[]byte(c4),
 		0777,
 	)
 
@@ -68,6 +75,12 @@ func TestPut(t *testing.T) {
 		File:      tmpc3,
 	}
 
+	var putItemOption4 = PutItemOption{
+		TableName: "item",
+		Format:    "json",
+		File:      tmpc4,
+	}
+
 	cases := []struct {
 		input *PutItemOption
 		want  []map[string]interface{}
@@ -75,6 +88,7 @@ func TestPut(t *testing.T) {
 		{input: &putItemOption1, want: marr1},
 		{input: &putItemOption2, want: marr2},
 		{input: &putItemOption3, want: marr3},
+		{input: &putItemOption4, want: marr1},
 	}
 
 	for _, c := range cases {

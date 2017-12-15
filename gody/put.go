@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"unicode/utf8"
@@ -104,30 +105,42 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 	return attrs
 }
 
-func fromJSON(option *PutItemOption, reader *bufio.Reader, cmd *cobra.Command) []map[string]interface{} {
+type LineReader interface {
+	ReadBytes(delim byte) (line []byte, err error)
+}
+
+func fromJSON(option *PutItemOption, reader LineReader, cmd *cobra.Command) []map[string]interface{} {
+	var line []byte
 	attrs := []map[string]interface{}{}
-	attr := map[string]interface{}{}
-	lineCount := 0
+	var v interface{}
 	var err error
 
 	for {
 		if err == io.EOF {
-			return attrs
+			break
 		}
-		line, err := reader.ReadBytes('\n')
+		line, err = reader.ReadBytes('\n')
 		if err != nil {
-			cmd.Println("failed to read json")
+			if err != io.EOF {
+				cmd.Println("failed to read json")
+				break
+			}
 		}
-		lineCount++
 		if len(line) == 0 {
 			continue
 		}
 
-		err = json.Unmarshal(line, &attr)
-
+		err = json.Unmarshal(line, &v)
 		if err != nil {
 			cmd.Println("invalid json")
 		}
-		attrs = append(attrs, attr)
+
+		fmt.Printf("%#v\n", v)
+
+		for _, attr := range v.([]interface{}) {
+			fmt.Println(attr)
+			attrs = append(attrs, attr.(map[string]interface{}))
+		}
 	}
+	return attrs
 }
