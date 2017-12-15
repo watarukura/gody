@@ -1,10 +1,11 @@
 package gody
 
 import (
+	"strings"
+
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 type ScanOption struct {
@@ -30,27 +31,27 @@ func Scan(option *ScanOption, cmd *cobra.Command) {
 		cond.SetLimit(option.Limit)
 	}
 
-	var query_result *dynamodb.QueryResult
-	query_result, err = table.ScanWithCondition(cond)
+	var queryResult *dynamodb.QueryResult
+	queryResult, err = table.ScanWithCondition(cond)
 	if err != nil {
 		cmd.Println("error to scan")
 	}
 
-	var query_result_remain *dynamodb.QueryResult
+	var queryResultRemain *dynamodb.QueryResult
 	// queryの結果が1MBを超えたときはLastEvaluatedKeyがセットされて、そこで切り上げられる
-	for query_result.LastEvaluatedKey != nil {
-		startKey := query_result.LastEvaluatedKey
+	for queryResult.LastEvaluatedKey != nil {
+		startKey := queryResult.LastEvaluatedKey
 		cond.SetStartKey(startKey)
-		query_result_remain, err = table.ScanWithCondition(cond)
+		queryResultRemain, err = table.ScanWithCondition(cond)
 		if err != nil {
 			cmd.Println("error to scan for remain")
 		}
-		query_result.Items = append(query_result.Items, query_result_remain.Items...)
-		query_result.LastEvaluatedKey = query_result_remain.LastEvaluatedKey
-		query_result.Count += query_result.Count + query_result_remain.Count
-		query_result.ScannedCount += query_result.ScannedCount + query_result_remain.ScannedCount
+		queryResult.Items = append(queryResult.Items, queryResultRemain.Items...)
+		queryResult.LastEvaluatedKey = queryResultRemain.LastEvaluatedKey
+		queryResult.Count += queryResult.Count + queryResultRemain.Count
+		queryResult.ScannedCount += queryResult.ScannedCount + queryResultRemain.ScannedCount
 	}
-	result := query_result.ToSliceMap()
+	result := queryResult.ToSliceMap()
 
 	var fields []string
 	if option.Field != "" {

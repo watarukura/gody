@@ -4,9 +4,10 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
 	"sort"
 	"unicode/utf8"
+
+	"github.com/spf13/cobra"
 )
 
 type FormatTarget struct {
@@ -26,7 +27,7 @@ func Format(target FormatTarget) {
 	case "tsv":
 		toXsv(target, "\t")
 	case "json":
-		toJson(target)
+		toJSON(target)
 	}
 }
 
@@ -83,7 +84,7 @@ func toXsv(target FormatTarget, delimiter string) {
 	}
 }
 
-func toJson(target FormatTarget) {
+func toJSON(target FormatTarget) {
 	var jsonString []byte
 	if len(target.fields) > 0 {
 		m := make(map[string]interface{}, len(target.fields))
