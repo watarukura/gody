@@ -1,0 +1,32 @@
+package gody
+
+import (
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+)
+
+type DeleteOption struct {
+	TableName    string `validate:"required"`
+	PartitionKey string `validate:"required"`
+	SortKey      string
+}
+
+func Delete(option *DeleteOption, cmd *cobra.Command) {
+	svc, err := NewService(
+		viper.GetString("profile"),
+		viper.GetString("region"),
+	)
+	table, err := svc.GetTable(option.TableName)
+	if err != nil {
+		cmd.Println("error to get table")
+	}
+
+	if option.SortKey == "" {
+		err = table.Delete(option.PartitionKey)
+	} else {
+		err = table.Delete(option.PartitionKey, option.SortKey)
+	}
+	if err != nil {
+		cmd.Println("error to delete item")
+	}
+}
