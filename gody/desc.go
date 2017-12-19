@@ -39,25 +39,29 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 	var gsiNames []string
 	var gsiPkeys []string
 	var gsiSkeys []string
+	var hasSkey []bool
 	if len(design.GSI) > 0 {
-		for _, i := range design.GSI {
-			gsiNames = append(gsiNames, *i.IndexName)
-			keySchema := i.KeySchema
+		for i, idx := range design.GSI {
+			gsiNames = append(gsiNames, *idx.IndexName)
+			keySchema := idx.KeySchema
+			hasSkey = append(hasSkey, false)
 			for _, ks := range keySchema {
 				if *ks.KeyType == "HASH" {
 					gsiPkeys = append(gsiPkeys, *ks.AttributeName)
 				}
 				if *ks.KeyType == "RANGE" {
 					gsiSkeys = append(gsiSkeys, *ks.AttributeName)
+					hasSkey[i] = true
 				}
 			}
-			if gsiSkeys == nil {
+			if hasSkey[i] == true {
 				gsiSkeys = append(gsiSkeys, "_")
 			}
 		}
 	} else {
 		gsiNames = append(gsiNames, "_")
 	}
+
 	gsiNamesJoin := strings.Join(gsiNames, ";")
 	gsiPkeysJoin := strings.Join(gsiPkeys, ";")
 	gsiSkeysJoin := strings.Join(gsiSkeys, ";")
