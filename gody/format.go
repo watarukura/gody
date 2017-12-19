@@ -63,19 +63,19 @@ func toXsv(target FormatTarget, delimiter string) {
 	var (
 		body [][]string
 	)
-	body_unit := make([]string, len(head))
+	bodyUnit := []string{}
 	for _, v := range target.ddbresult {
 		for _, h := range head {
 			// 存在しないキーの場合は、値を"_"にする
 			_, ok := v[h]
 			if ok {
-				body_unit = append(body_unit, fmt.Sprint(v[h]))
+				bodyUnit = append(bodyUnit, fmt.Sprint(v[h]))
 			} else {
-				body_unit = append(body_unit, "_")
+				bodyUnit = append(bodyUnit, "_")
 			}
 		}
-		body = append(body, body_unit)
-		body_unit = make([]string, len(head))
+		body = append(body, bodyUnit)
+		bodyUnit = []string{}
 	}
 
 	for _, b := range body {
