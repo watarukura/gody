@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"encoding/json"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -62,19 +63,26 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 		gsiNames = append(gsiNames, "_")
 	}
 
-	gsiNamesJoin := strings.Join(gsiNames, ";")
-	gsiPkeysJoin := strings.Join(gsiPkeys, ";")
-	gsiSkeysJoin := strings.Join(gsiSkeys, ";")
-
 	result := map[string]interface{}{
-		"name":     name,
-		"pkey":     pkey,
-		"skey":     skey,
-		"count":    count,
-		"gsi":      gsiNamesJoin,
-		"gsi_pkey": gsiPkeysJoin,
-		"gsi_skey": gsiSkeysJoin,
+		"name":  name,
+		"pkey":  pkey,
+		"skey":  skey,
+		"count": count,
 	}
+	var gsiKeyName string
+	var gsiMap map[string]string
+	var gsiJSON []byte
+	for i, name := range gsiNames {
+		gsiKeyName = "gsi_" + name
+		gsiMap = map[string]string{
+			"pkey": gsiPkeys[i],
+			"skey": gsiSkeys[i],
+		}
+
+		gsiJSON, err = json.Marshal(gsiMap)
+		result[gsiKeyName] = string(gsiJSON)
+	}
+
 	var resultSlice []map[string]interface{}
 	resultSlice = append(resultSlice, result)
 
