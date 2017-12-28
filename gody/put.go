@@ -28,7 +28,10 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to get table")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	item := dynamodb.NewPutItem()
@@ -41,7 +44,10 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 
 		err = table.Put()
 		if err != nil {
+			cmd.SetOutput(os.Stderr)
 			cmd.Println("error to put item")
+			cmd.Println(err)
+			os.Exit(1)
 		}
 	}
 }
@@ -53,7 +59,10 @@ func buildAttribute(option *PutItemOption, cmd *cobra.Command) []map[string]inte
 	if option.File != "" {
 		file, err := os.OpenFile(option.File, os.O_RDONLY, 0600)
 		if err != nil {
+			cmd.SetOutput(os.Stderr)
 			cmd.Println("failed to read file")
+			cmd.Println(err)
+			os.Exit(1)
 		}
 		reader = bufio.NewReader(file)
 		defer file.Close()
@@ -70,6 +79,10 @@ func buildAttribute(option *PutItemOption, cmd *cobra.Command) []map[string]inte
 		attrs = fromXsv(option, reader, "\t", cmd)
 	case "json":
 		attrs = fromJSON(option, reader, cmd)
+	default:
+		cmd.SetOutput(os.Stderr)
+		cmd.Println("choice format ssv|csv|tsv|json")
+		os.Exit(1)
 	}
 	return attrs
 }
@@ -87,7 +100,10 @@ func fromXsv(option *PutItemOption, reader *bufio.Reader, delimiter string, cmd 
 
 	csvAll, err := csvReader.ReadAll()
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("failed to read csv file")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 	header := csvAll[0]
 	body := csvAll[1:]
@@ -123,7 +139,10 @@ func fromJSON(option *PutItemOption, reader LineReader, cmd *cobra.Command) []ma
 		line, err = reader.ReadBytes('\n')
 		if err != nil {
 			if err != io.EOF {
+				cmd.SetOutput(os.Stderr)
 				cmd.Println("failed to read json")
+				cmd.Println(err)
+				os.Exit(1)
 				break
 			}
 		}
@@ -133,7 +152,10 @@ func fromJSON(option *PutItemOption, reader LineReader, cmd *cobra.Command) []ma
 
 		err = json.Unmarshal(line, &v)
 		if err != nil {
+			cmd.SetOutput(os.Stderr)
 			cmd.Println("invalid json")
+			cmd.Println(err)
+			os.Exit(1)
 		}
 
 		// JSONの配列の場合は[]map[string]interface

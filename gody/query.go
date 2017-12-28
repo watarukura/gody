@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"os"
 	"strings"
 
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
@@ -31,7 +32,10 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to get table")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	cond := buildCondition(table, option, cmd)
@@ -42,7 +46,10 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 	var queryResult *dynamodb.QueryResult
 	queryResult, err = table.Query(cond)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to query")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	var queryResultRemain *dynamodb.QueryResult
@@ -52,7 +59,10 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 		cond.SetStartKey(startKey)
 		queryResultRemain, err = table.ScanWithCondition(cond)
 		if err != nil {
+			cmd.SetOutput(os.Stderr)
 			cmd.Println("error to query for remain")
+			cmd.Println(err)
+			os.Exit(1)
 		}
 		queryResult.Items = append(queryResult.Items, queryResultRemain.Items...)
 		queryResult.LastEvaluatedKey = queryResultRemain.LastEvaluatedKey
@@ -80,7 +90,10 @@ func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Comma
 	cond := table.NewConditionList()
 	design, err := table.Design()
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to describe table")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	cond.SetLimit(option.Limit)

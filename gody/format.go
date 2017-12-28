@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"unicode/utf8"
 
@@ -28,6 +29,10 @@ func Format(target FormatTarget) {
 		toXsv(target, "\t")
 	case "json":
 		toJSON(target)
+	default:
+		cmd.SetOutput(os.Stderr)
+		target.cmd.Println("choice format ssv|csv|tsv|json")
+		os.Exit(1)
 	}
 }
 

@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -23,7 +24,10 @@ func Get(option *GetItemOption, cmd *cobra.Command) {
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to get table")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	var result map[string]interface{}
@@ -33,7 +37,10 @@ func Get(option *GetItemOption, cmd *cobra.Command) {
 		result, err = table.GetOne(option.PartitionKey, option.SortKey)
 	}
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to get item")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	var resultSlice []map[string]interface{}

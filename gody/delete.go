@@ -28,5 +28,7 @@ func Delete(option *DeleteOption, cmd *cobra.Command) {
 	}
 	if err != nil {
 		cmd.Println("error to delete item")
+		cmd.Println(err)
+
 	}
 }

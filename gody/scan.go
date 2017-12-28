@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"os"
 	"strings"
 
 	"github.com/evalphobia/aws-sdk-go-wrapper/dynamodb"
@@ -23,7 +24,10 @@ func Scan(option *ScanOption, cmd *cobra.Command) {
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to get table")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	cond := table.NewConditionList()
@@ -34,7 +38,10 @@ func Scan(option *ScanOption, cmd *cobra.Command) {
 	var queryResult *dynamodb.QueryResult
 	queryResult, err = table.ScanWithCondition(cond)
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to scan")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 
 	var queryResultRemain *dynamodb.QueryResult
@@ -44,7 +51,10 @@ func Scan(option *ScanOption, cmd *cobra.Command) {
 		cond.SetStartKey(startKey)
 		queryResultRemain, err = table.ScanWithCondition(cond)
 		if err != nil {
+			cmd.SetOutput(os.Stderr)
 			cmd.Println("error to scan for remain")
+			cmd.Println(err)
+			os.Exit(1)
 		}
 		queryResult.Items = append(queryResult.Items, queryResultRemain.Items...)
 		queryResult.LastEvaluatedKey = queryResultRemain.LastEvaluatedKey

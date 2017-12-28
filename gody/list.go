@@ -1,6 +1,8 @@
 package gody
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -12,7 +14,10 @@ func List(cmd *cobra.Command) {
 	)
 	tables, err := svc.ListTables()
 	if err != nil {
+		cmd.SetOutput(os.Stderr)
 		cmd.Println("error to list tables")
+		cmd.Println(err)
+		os.Exit(1)
 	}
 	for _, table := range tables {
 		cmd.Println(table)
