@@ -30,7 +30,7 @@ func Format(target FormatTarget) {
 	case "json":
 		toJSON(target)
 	default:
-		cmd.SetOutput(os.Stderr)
+		target.cmd.SetOutput(os.Stderr)
 		target.cmd.Println("choice format ssv|csv|tsv|json")
 		os.Exit(1)
 	}
