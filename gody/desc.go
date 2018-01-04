@@ -80,9 +80,11 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 	var gsiSkey string
 	for i, name := range gsiNames {
 		gsiPkey = "GSI_pkey/" + name
-		gsiSkey = "GSI_skey/" + name
 		result[gsiPkey] = gsiPkeys[i]
-		result[gsiSkey] = gsiSkeys[i]
+		if len(gsiSkeys) > 0 {
+			gsiSkey = "GSI_skey/" + name
+			result[gsiSkey] = gsiSkeys[i]
+		}
 	}
 
 	var resultSlice []map[string]interface{}
