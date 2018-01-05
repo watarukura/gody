@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
+	"reflect"
 	"strings"
 	"testing"
 )
 
 func TestFormat(t *testing.T) {
-	m := map[string]interface{}{"jan": "4937751121103", "name": "つぼキーク", "price": 2000}
-	var marr []map[string]interface{}
-	marr = append(marr, m)
+	marr := getTestFormatTargetDdbResult()
 	cmd := new(cobra.Command)
 
 	var formatTarget1 = FormatTarget{
@@ -67,5 +66,62 @@ func TestFormat(t *testing.T) {
 		if c.want != lineOne {
 			t.Errorf("unexpected response: want:%+v, get:%+v", c.want, get)
 		}
+	}
+}
+
+func getTestFormatTargetDdbResult() []map[string]interface{} {
+	var ddbResult []map[string]interface{}
+	m := map[string]interface{}{"jan": "4937751121103", "name": "つぼキーク", "price": 2000}
+	ddbResult = append(ddbResult, m)
+	return ddbResult
+}
+
+func getTestFormatTarget(ddbResult []map[string]interface{}) FormatTarget {
+	cmd := new(cobra.Command)
+	target := FormatTarget{
+		ddbresult: ddbResult,
+		header:    true,
+		format:    "json",
+		fields:    []string{"name", "jan"},
+		cmd:       cmd,
+	}
+	return target
+}
+
+var testCreateBodyExpectedResult = [][]string{{"つぼキーク", "4937751121103"}}
+
+func Test_createBody(t *testing.T) {
+	target := getTestFormatTarget(getTestFormatTargetDdbResult())
+	head := []string{"name", "jan"}
+	body := createBody(target, head)
+	if !reflect.DeepEqual(body, testCreateBodyExpectedResult) {
+		t.Errorf("expected: %s, actual: %s", testCreateBodyExpectedResult, body)
+	}
+}
+
+func Test_deprecatedCreateBody(t *testing.T) {
+	target := getTestFormatTarget(getTestFormatTargetDdbResult())
+	head := []string{"name", "jan"}
+	body := deprecatedCreateBody(target, head)
+	if !reflect.DeepEqual(body, testCreateBodyExpectedResult) {
+		t.Errorf("expected: %s, actual: %s", testCreateBodyExpectedResult, body)
+	}
+}
+
+func Benchmark_deprecatedCreateBody(b *testing.B) {
+	target := getTestFormatTarget(getTestFormatTargetDdbResult())
+	head := []string{"name", "jan"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		deprecatedCreateBody(target, head)
+	}
+}
+
+func Benchmark_createBody(b *testing.B) {
+	target := getTestFormatTarget(getTestFormatTargetDdbResult())
+	head := []string{"name", "jan"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		createBody(target, head)
 	}
 }
