@@ -45,15 +45,6 @@ $ gody query --table <TableName> \
 
 ```
 
-### Update
-
-```
-$ gody update --table <TableName> \
-     --pkey <PartitionKey> \
-     --skey <SortKey> \
-     --set {}
-```
-
 ### Put
 
 ```
