@@ -84,3 +84,11 @@ $ gody scan --table <TableName> \
      --header \
      --limit 10
 ```
+
+### Desc
+
+```
+$ gody desc --table <TableName> \
+     --format <ssv|csv|tsv|json> \
+     --header
+```
