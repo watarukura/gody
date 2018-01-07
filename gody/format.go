@@ -65,6 +65,15 @@ func toXsv(target FormatTarget, delimiter string) {
 		w.Flush()
 	}
 
+	body := createBody(target, head)
+
+	for _, b := range body {
+		w.Write(b)
+		w.Flush()
+	}
+}
+
+func deprecatedCreateBody(target FormatTarget, head []string) [][]string {
 	var (
 		body [][]string
 	)
@@ -82,11 +91,26 @@ func toXsv(target FormatTarget, delimiter string) {
 		body = append(body, bodyUnit)
 		bodyUnit = []string{}
 	}
+	return body
+}
 
-	for _, b := range body {
-		w.Write(b)
-		w.Flush()
+func createBody(target FormatTarget, head []string) [][]string {
+	body := make([][]string, 0, len(target.ddbresult))
+	const emptySymbol = "_"
+
+	for _, v := range target.ddbresult {
+		bodyUnit := make([]string, 0, len(head))
+		for _, h := range head {
+			// 存在しないキーの場合は、値を"_"にする
+			if _, ok := v[h]; ok {
+				bodyUnit = append(bodyUnit, fmt.Sprint(v[h]))
+			} else {
+				bodyUnit = append(bodyUnit, emptySymbol)
+			}
+		}
+		body = append(body, bodyUnit)
 	}
+	return body
 }
 
 func toJSON(target FormatTarget) {
