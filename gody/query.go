@@ -57,7 +57,7 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 	for queryResult.LastEvaluatedKey != nil {
 		startKey := queryResult.LastEvaluatedKey
 		cond.SetStartKey(startKey)
-		queryResultRemain, err = table.ScanWithCondition(cond)
+		queryResultRemain, err = table.Query(cond)
 		if err != nil {
 			cmd.SetOutput(os.Stderr)
 			cmd.Println("error to query for remain")
