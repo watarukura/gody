@@ -88,13 +88,7 @@ func Query(option *QueryOption, cmd *cobra.Command) {
 
 func buildCondition(table *dynamodb.Table, option *QueryOption, cmd *cobra.Command) *dynamodb.ConditionList {
 	cond := table.NewConditionList()
-	design, err := table.Design()
-	if err != nil {
-		cmd.SetOutput(os.Stderr)
-		cmd.Println("error to describe table")
-		cmd.Println(err)
-		os.Exit(1)
-	}
+	design := table.GetDesign()
 
 	cond.SetLimit(option.Limit)
 	var (

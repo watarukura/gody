@@ -28,13 +28,7 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 		os.Exit(1)
 	}
 
-	design, err := table.Design()
-	if err != nil {
-		cmd.SetOutput(os.Stderr)
-		cmd.Println("error to get table design")
-		cmd.Println(err)
-		os.Exit(1)
-	}
+	design := table.GetDesign()
 
 	name := design.GetName()
 	pkey := design.GetHashKeyName()
