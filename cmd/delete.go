@@ -37,9 +37,9 @@ func NewCmdDel() *cobra.Command {
 	}
 
 	options := cmd.Flags()
-	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
-	options.StringVar(&getOption.PartitionKey, "pkey", "", "Partition Key")
-	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
+	options.StringVarP(&deleteOption.TableName, "table", "T", "", "DynamoDB table name")
+	options.StringVar(&deleteOption.PartitionKey, "pkey", "", "Partition Key")
+	options.StringVar(&deleteOption.SortKey, "skey", "", "Sort Key")
 
 	return cmd
 
