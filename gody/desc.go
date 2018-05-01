@@ -59,8 +59,6 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 				gsiSkeys = append(gsiSkeys, "_")
 			}
 		}
-	} else {
-		gsiNames = append(gsiNames, "_")
 	}
 
 	result := map[string]interface{}{
