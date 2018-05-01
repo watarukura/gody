@@ -3,10 +3,11 @@ package gody
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/cobra"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/spf13/cobra"
 )
 
 func TestFormat(t *testing.T) {
@@ -45,6 +46,14 @@ func TestFormat(t *testing.T) {
 		cmd:       cmd,
 	}
 
+	var formatTarget5 = FormatTarget{
+		ddbresult: marr,
+		header:    true,
+		format:    "json",
+		fields:    []string{"name", "jan", "dummy"},
+		cmd:       cmd,
+	}
+
 	cases := []struct {
 		input FormatTarget
 		want  string
@@ -53,6 +62,7 @@ func TestFormat(t *testing.T) {
 		{input: formatTarget2, want: "jan name price"},
 		{input: formatTarget3, want: "[{\"jan\":\"4937751121103\",\"name\":\"つぼキーク\",\"price\":2000}]"},
 		{input: formatTarget4, want: "[{\"jan\":\"4937751121103\",\"name\":\"つぼキーク\"}]"},
+		{input: formatTarget5, want: "[{\"dummy\":\"_\",\"jan\":\"4937751121103\",\"name\":\"つぼキーク\"}]"},
 	}
 
 	for _, c := range cases {

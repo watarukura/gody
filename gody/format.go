@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const emptySymbol = "_"
+
 type FormatTarget struct {
 	ddbresult []map[string]interface{}
 	format    string
@@ -96,7 +98,6 @@ func deprecatedCreateBody(target FormatTarget, head []string) [][]string {
 
 func createBody(target FormatTarget, head []string) [][]string {
 	body := make([][]string, 0, len(target.ddbresult))
-	const emptySymbol = "_"
 
 	for _, v := range target.ddbresult {
 		bodyUnit := make([]string, 0, len(head))
@@ -120,9 +121,11 @@ func toJSON(target FormatTarget) {
 		marr := []map[string]interface{}{}
 		for _, v := range target.ddbresult {
 			for _, f := range target.fields {
-				_, ok := v[f]
-				if ok {
+				// 存在しないキーの場合は、値を"_"にする
+				if _, ok := v[f]; ok {
 					m[f] = v[f]
+				} else {
+					m[f] = emptySymbol
 				}
 			}
 			marr = append(marr, m)
