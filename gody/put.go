@@ -25,6 +25,7 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
+		viper.GetString("endpoint"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {

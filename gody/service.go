@@ -9,12 +9,14 @@ import (
 type Option struct {
 	profile string
 	region  string
+	endpoint string
 }
 
-func NewService(profile string, region string) (*dynamodb.DynamoDB, error) {
+func NewService(profile string, region string, endpoint string) (*dynamodb.DynamoDB, error) {
 	svc, err := dynamodb.New(config.Config{
 		Region:  region,
 		Profile: profile,
+		Endpoint: endpoint,
 	})
 	if err != nil {
 		log.Fatal("create service error")

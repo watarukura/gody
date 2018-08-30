@@ -42,9 +42,11 @@ func NewCmdRoot() *cobra.Command {
 
 	cmd.PersistentFlags().StringVar(&profile, "profile", "default", "AWS profile")
 	cmd.PersistentFlags().StringVar(&region, "region", "ap-northeast-1", "AWS region")
+	cmd.PersistentFlags().StringVar(&endpoint, "endpoint", "", "DynamoDB Local Endpoint URL")
 
 	viper.BindPFlag("profile", cmd.PersistentFlags().Lookup("profile"))
 	viper.BindPFlag("region", cmd.PersistentFlags().Lookup("region"))
+	viper.BindPFlag("endpoint", cmd.PersistentFlags().Lookup("endpoint"))
 
 	cmd.AddCommand(NewCmdList())
 	cmd.AddCommand(NewCmdGet())
@@ -70,8 +72,9 @@ func Execute() {
 }
 
 var (
-	profile string
-	region  string
+	profile  string
+	region   string
+	endpoint string
 )
 
 func init() {
