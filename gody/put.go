@@ -35,10 +35,10 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 		os.Exit(1)
 	}
 
-	item := dynamodb.NewPutItem()
 	attributes := buildAttribute(option, cmd)
-	table.AddItem(item)
 	for _, l := range attributes {
+		item := dynamodb.NewPutItem()
+		table.AddItem(item)
 		for k, v := range l {
 			item.AddAttribute(k, v)
 		}

@@ -14,6 +14,7 @@
     "aws/credentials/ec2rolecreds",
     "aws/credentials/endpointcreds",
     "aws/credentials/stscreds",
+    "aws/csm",
     "aws/defaults",
     "aws/ec2metadata",
     "aws/endpoints",
@@ -22,6 +23,7 @@
     "aws/signer/v4",
     "internal/sdkio",
     "internal/sdkrand",
+    "internal/sdkuri",
     "internal/shareddefaults",
     "private/protocol",
     "private/protocol/json/jsonutil",
@@ -33,8 +35,8 @@
     "service/dynamodb",
     "service/sts"
   ]
-  revision = "64aa9485bf77b8a811e88e95060a4a049bb373fb"
-  version = "v1.13.37"
+  revision = "04abd557eeaab3cfdded45467eea00fc03db9cb9"
+  version = "v1.15.26"
 
 [[projects]]
   name = "github.com/evalphobia/aws-sdk-go-wrapper"
@@ -57,8 +59,8 @@
 [[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
-  revision = "6529cf7c58879c08d927016dde4477f18a0634cb"
-  version = "v1.36.0"
+  revision = "5cf292cae48347c2490ac1a58fe36735fb78df7e"
+  version = "v1.38.2"
 
 [[projects]]
   name = "github.com/go-playground/locales"
@@ -76,7 +78,6 @@
   version = "v0.16.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [
     ".",
@@ -90,7 +91,8 @@
     "json/scanner",
     "json/token"
   ]
-  revision = "ef8a98b0bbce4a65b5aa4c368430a80ddc533168"
+  revision = "8cb6e5b959231cc1119e43259c4a608f9c51a241"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/inconshreveable/mousetrap"
@@ -106,26 +108,26 @@
 [[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
-  revision = "c3beff4c2358b44d0493c7dda585e7db7ff28ae6"
-  version = "v1.7.6"
+  revision = "c2353362d570a7bfa228149c62842019201cfb71"
+  version = "v1.8.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
-  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
+  revision = "ae18d6b8b3205b561c79e8e5f69bff09736185f4"
+  version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "00c29f56e2386353d58c599509e8dc3801b0d716"
+  revision = "fa473d140ef3c6adf42d6b391fe76707f1f243c8"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/pelletier/go-toml"
   packages = ["."]
-  revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
-  version = "v1.1.0"
+  revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -133,8 +135,8 @@
     ".",
     "mem"
   ]
-  revision = "63644898a8da0bc22138abf860edaf5277b6102e"
-  version = "v1.1.0"
+  revision = "787d034dfe70e44075ccc060d346146ef53270ad"
+  version = "v1.1.1"
 
 [[projects]]
   name = "github.com/spf13/cast"
@@ -145,32 +147,32 @@
 [[projects]]
   name = "github.com/spf13/cobra"
   packages = ["."]
-  revision = "a1f051bc3eba734da4772d60e2d677f47cf93ef4"
-  version = "v0.0.2"
+  revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
+  version = "v0.0.3"
 
 [[projects]]
   branch = "master"
   name = "github.com/spf13/jwalterweatherman"
   packages = ["."]
-  revision = "7c0cea34c8ece3fbeb2b27ab9b59511d360fb394"
+  revision = "14d3d4c518341bea657dd8a226f5121c0ff8c9f2"
 
 [[projects]]
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
-  version = "v1.0.1"
+  revision = "9a97c102cda95a86cec2345a6f09f55a939babf5"
+  version = "v1.0.2"
 
 [[projects]]
   name = "github.com/spf13/viper"
   packages = ["."]
-  revision = "b5e8006cbee93ec955a89ab31e0e3ce3204f3736"
-  version = "v1.0.2"
+  revision = "907c19d40d9a6c9bb55f040ff4ae45271a4754b9"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "bb9c189858d91f42db229b04d45a4c3d23a7662a"
+  revision = "fa5fdf94c78965f1aa8423f0cc50b8b8d728b05a"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -188,8 +190,8 @@
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
   packages = ["."]
-  revision = "14984d91328f9612b58443cbdf4a077d4fd71091"
-  version = "v9.15.0"
+  revision = "e69e9a28bb62b977fdc58d051f1bb477b7cbe486"
+  version = "v9.21.0"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
