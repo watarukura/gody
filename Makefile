@@ -8,8 +8,6 @@ GOGET=$(GOCMD) get
 GOVET=$(GOCMD) vet
 GOLINT=golint
 GOX=gox
-DEPCMD=dep
-DEPENSURE=$(DEPCMD) ensure
 BINARY_NAME=gody
 
 all: test clean build
@@ -25,12 +23,6 @@ test:
 clean:
 		$(GOCLEAN)
 		rm -rf bin/
-#run:
-#		$(GOBUILD) -o $(BINARY_NAME) -v ./...
-#		./$(BINARY_NAME)
-deps:
-		$(GOGET) -d -v .
-		$(DEPENSURE) -update
 
 ## Cross compilation
 #build-linux:
